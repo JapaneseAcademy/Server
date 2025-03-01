@@ -29,13 +29,13 @@ public class Member {
     private Role role;
 
     @Column(length = 2048)
-    private String imageUrl;
+    private String imageUrl = "";
 
     @Column(length = 100)
-    private String address;
+    private String address = "";
 
     @Column(length = 500)
-    private String notes;
+    private String notes = "";
 
 
     @Builder
