@@ -22,6 +22,9 @@ public class CourseInfo {
     private Integer cost;
 
     @Column(nullable = false)
+    private String mainImageUrl;
+
+    @Column(nullable = false)
     private Boolean isLive;
 
     @Column(nullable = false)
