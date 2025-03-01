@@ -29,11 +29,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public ReviewDetailResponse getReviewByReviewId(Long reviewId) {
         Review review = commonService.getReviewByReviewId(reviewId);
-        List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(review.getId());
-        CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(review.getCourseInfo().getId());
 
-        String writer = getNameByReviewId(review.getId());
-        return ReviewConverter.toReviewDetailResponse(courseInfo, review, imageUrls, writer);
+        return getReviewDetail(review);
     }
 
     @Override
@@ -48,12 +45,23 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public ReviewListResponse getBestReviewByCourseInfoId(Long courseInfoId, Integer page) {
+    public ReviewListResponse getBestReviewsByCourseInfoId(Long courseInfoId, Integer page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         return processReview(() ->
                 reviewRepository.getBestReviewByCourseInfoId(courseInfoId, pageable), pageable
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewDetailResponse> getMainReviewsByCourse() {
+        List<Review> reviews = reviewRepository.getMainReviewByCourseInfoId();
+        List<ReviewDetailResponse> responses = reviews.stream()
+                .map(review -> getReviewDetail(review))
+                .toList();
+
+        return responses;
     }
 
     private ReviewListResponse processReview(Supplier<Page<ReviewProjection>> supplier, Pageable pageable) {
@@ -75,5 +83,13 @@ public class ReviewServiceImpl implements ReviewService {
             return "익명";
         }
         return reviewRepository.getNameByReviewId(reviewId);
+    }
+
+    private ReviewDetailResponse getReviewDetail(Review review) {
+        CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(review.getCourseInfo().getId());
+        List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(review.getId());
+        String writer = reviewRepository.getNameByReviewId(review.getId());
+
+        return ReviewConverter.toReviewDetailResponse(courseInfo, review, imageUrls, writer);
     }
 }

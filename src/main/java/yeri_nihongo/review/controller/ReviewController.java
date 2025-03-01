@@ -7,6 +7,8 @@ import yeri_nihongo.review.dto.response.ReviewDetailResponse;
 import yeri_nihongo.review.dto.response.ReviewListResponse;
 import yeri_nihongo.review.service.ReviewService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/reviews")
 @RequiredArgsConstructor
@@ -38,8 +40,15 @@ public class ReviewController {
             @RequestParam("courseInfoId") Long courseInfoId,
             @RequestParam(value = "page", defaultValue = "0") Integer page
     ) {
-        ReviewListResponse response = reviewService.getBestReviewByCourseInfoId(courseInfoId, page);
+        ReviewListResponse response = reviewService.getBestReviewsByCourseInfoId(courseInfoId, page);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/main")
+    public ResponseEntity<List<ReviewDetailResponse>> getMainReviews() {
+        List<ReviewDetailResponse> responses = reviewService.getMainReviewsByCourse();
+
+        return ResponseEntity.ok(responses);
     }
 }

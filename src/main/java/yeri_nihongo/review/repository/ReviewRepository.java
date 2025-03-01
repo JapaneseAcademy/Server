@@ -36,4 +36,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "FROM Review r " +
             "WHERE r.isBest = true and r.courseInfo.id = :courseInfoId")
     Page<ReviewProjection> getBestReviewByCourseInfoId(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
+
+    @Query("SELECT r " +
+            "FROM Review r " +
+            "WHERE r.isForMain = true")
+    List<Review> getMainReviewByCourseInfoId();
 }
