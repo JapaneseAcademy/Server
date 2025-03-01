@@ -5,8 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import yeri_nihongo.common.domain.BaseTimeEntity;
-import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.member.domain.Member;
+import yeri_nihongo.time.domain.TimeTable;
 
 import java.time.LocalDateTime;
 
@@ -28,11 +28,11 @@ public class Enrollment extends BaseTimeEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "courseId")
+    @JoinColumn(name = "timeTableId")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Course course;
+    private TimeTable timeTable;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Category category;
 
     @Column(nullable = false)
