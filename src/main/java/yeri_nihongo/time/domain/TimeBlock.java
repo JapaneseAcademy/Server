@@ -24,7 +24,7 @@ public class TimeBlock {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private TimeTable timeTable;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Weekday weekday;
 
     @Column(nullable = false)
