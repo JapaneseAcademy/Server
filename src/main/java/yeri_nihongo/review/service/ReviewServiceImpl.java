@@ -15,6 +15,7 @@ import yeri_nihongo.review.dto.response.ReviewResponse;
 import yeri_nihongo.review.repository.ReviewRepository;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,24 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public ReviewListResponse getReviewsByCourseInfoId(Long courseInfoId, Integer page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<ReviewProjection> reviewProjections = reviewRepository.getReviewByCourseInfoId(courseInfoId, pageable);
+
+        return processReview(() ->
+                reviewRepository.getReviewByCourseInfoId(courseInfoId, pageable), pageable
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewListResponse getBestReviewByCourseInfoId(Long courseInfoId, Integer page) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        return processReview(() ->
+                reviewRepository.getBestReviewByCourseInfoId(courseInfoId, pageable), pageable
+        );
+    }
+
+    private ReviewListResponse processReview(Supplier<Page<ReviewProjection>> supplier, Pageable pageable) {
+        Page<ReviewProjection> reviewProjections = supplier.get();
         List<ReviewResponse> responses = reviewProjections.stream()
                 .map(reviewProjection -> {
                     List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(reviewProjection.getId());

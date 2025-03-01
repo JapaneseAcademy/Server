@@ -8,4 +8,6 @@ public interface ReviewService {
     ReviewDetailResponse getReviewByReviewId(Long reviewId);
 
     ReviewListResponse getReviewsByCourseInfoId(Long courseInfoId, Integer page);
+
+    ReviewListResponse getBestReviewByCourseInfoId(Long courseInfoId, Integer page);
 }

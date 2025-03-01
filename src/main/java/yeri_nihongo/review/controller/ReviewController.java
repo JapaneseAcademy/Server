@@ -32,4 +32,14 @@ public class ReviewController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/best")
+    public ResponseEntity<ReviewListResponse> getBestReviewsByCourseInfoId(
+            @RequestParam("courseInfoId") Long courseInfoId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page
+    ) {
+        ReviewListResponse response = reviewService.getBestReviewByCourseInfoId(courseInfoId, page);
+
+        return ResponseEntity.ok(response);
+    }
 }
