@@ -2,11 +2,9 @@ package yeri_nihongo.review.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import yeri_nihongo.review.dto.response.ReviewDetailResponse;
+import yeri_nihongo.review.dto.response.ReviewListResponse;
 import yeri_nihongo.review.service.ReviewService;
 
 @RestController
@@ -17,8 +15,20 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<ReviewDetailResponse> getReviewByReviewId(@PathVariable Long reviewId) {
+    public ResponseEntity<ReviewDetailResponse> getReviewByReviewId(
+            @PathVariable Long reviewId
+    ) {
         ReviewDetailResponse response = reviewService.getReviewByReviewId(reviewId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ReviewListResponse> getReviewsByCourseInfoId(
+            @RequestParam("courseInfoId") Long courseInfoId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page
+    ) {
+        ReviewListResponse response = reviewService.getReviewsByCourseInfoId(courseInfoId, page);
 
         return ResponseEntity.ok(response);
     }
