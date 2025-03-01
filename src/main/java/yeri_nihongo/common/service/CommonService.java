@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.course.domain.Course;
+import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.course.repository.CourseInfoRepository;
 import yeri_nihongo.course.repository.CourseRepository;
 import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.enrollment.repository.EnrollmentRepository;
+import yeri_nihongo.exception.course.CourseInfoNotFoundException;
 import yeri_nihongo.exception.course.CourseNotFoundException;
 import yeri_nihongo.exception.enrollment.EnrollmentNotFoundException;
 import yeri_nihongo.exception.member.UserNotFoundException;
@@ -22,6 +25,7 @@ public class CommonService {
 
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
+    private final CourseInfoRepository courseInfoRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final ReviewRepository reviewRepository;
 
@@ -46,8 +50,14 @@ public class CommonService {
 
     @Transactional(readOnly = true)
     public Course getCourseByCourseId(Long courseId) {
-        return courseRepository.findById(courseId).orElseThrow(
-                () -> new CourseNotFoundException(courseId)
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId)
         );
+    }
+
+    @Transactional(readOnly = true)
+    public CourseInfo getCourseInfoByCourseInfoId(Long courseInfoId) {
+        return courseInfoRepository.findById(courseInfoId)
+                .orElseThrow(() -> new CourseInfoNotFoundException(courseInfoId));
     }
 }
