@@ -1,0 +1,26 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/japanese?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${database.local.username}
+    password: ${database.local.password}
+
+  h2:
+    console:
+      enabled: true # H2 콘솔을 활성화합니다.
+      path: /h2-console # H2 콘솔의 접근 경로
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true # 실제 db 어떻게 sql 나가는지 확인
+
+logging:
+  level:
+    root: INFO
+    org.springframework: DEBUG
+    org.hibernate.SQL: DEBUG

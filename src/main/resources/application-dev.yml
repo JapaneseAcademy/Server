@@ -1,0 +1,22 @@
+spring:
+  config:
+    include: "classpath:SECRET.yml"
+    activate:
+      on-profile: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${database.host.dev}/${database.name}
+    username: ${database.username}
+    password: ${database.password}
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true # 실제 db 어떻게 sql 나가는지 확인
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.academy.backend: DEBUG

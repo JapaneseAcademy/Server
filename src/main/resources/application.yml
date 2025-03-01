@@ -1,0 +1,30 @@
+spring:
+  config:
+    import: classpath:SECRET.yml
+  profiles:
+    active: ec2
+
+  main:
+    time-zone: Asia/Seoul
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Hibernate의 DDL 자동 생성 전략 (update, create, create-drop 등)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      mode: always # 애플리케이션 시작 시 스크립트 초기화 (기본값: embedded)
+
+  redis:
+    host:
+      redis
+    port:
+      6379
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
