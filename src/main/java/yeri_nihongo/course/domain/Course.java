@@ -1,7 +1,10 @@
 package yeri_nihongo.course.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,8 +30,6 @@ public class Course {
 
     @Column(nullable = false)
     private LocalDate endDate;
-
-    private int studentCount = 0;
 
     @Builder
     public Course(CourseInfo courseInfo, LocalDate startDate, LocalDate endDate) {
