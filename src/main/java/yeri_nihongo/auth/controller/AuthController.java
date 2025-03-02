@@ -42,9 +42,4 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/token")
-    public ResponseEntity<?> isInstructor() {
-        return ResponseEntity.ok().build();
-    }
 }
