@@ -8,11 +8,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@Builder
-public class CourseResponse {
+public class CourseResponse extends CourseBaseResponse {
 
-    private Long courseId;
-    private LocalDate startDate;
-    private LocalDate endDate;
     private List<TimeTableResponse> timeTables;
+
+    @Builder
+    public CourseResponse(Long courseId, LocalDate startDate, LocalDate endDate, Long courseId1, LocalDate startDate1, LocalDate endDate1, List<TimeTableResponse> timeTables) {
+        super(courseId, startDate, endDate);
+        this.timeTables = timeTables;
+    }
 }
