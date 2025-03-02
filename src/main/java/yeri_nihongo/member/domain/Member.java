@@ -12,6 +12,10 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member", indexes = {
+        @Index(name = "idx_member_role", columnList = "role"),
+        @Index(name = "idx_member_name", columnList = "name")
+})
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -29,25 +33,16 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(length = 2048)
-    private String imageUrl = "";
-
-    @Column(length = 100)
-    private String address = "";
-
     @Column(length = 500)
-    private String notes = "";
+    private String notes;
 
 
     @Builder
-    public Member(String loginId, String name, String phone, LocalDate birth, Role role, String imageUrl, String address, String notes) {
+    public Member(String loginId, String name, String phone, LocalDate birth, Role role) {
         this.loginId = loginId;
         this.name = name;
         this.phone = phone;
         this.birth = birth;
         this.role = role;
-        this.imageUrl = imageUrl;
-        this.address = address;
-        this.notes = notes;
     }
 }
