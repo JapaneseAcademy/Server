@@ -8,10 +8,7 @@ import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.review.converter.ReviewConverter;
 import yeri_nihongo.review.domain.Review;
-import yeri_nihongo.review.dto.response.ReviewDetailResponse;
-import yeri_nihongo.review.dto.response.ReviewListResponse;
-import yeri_nihongo.review.dto.response.ReviewProjection;
-import yeri_nihongo.review.dto.response.ReviewResponse;
+import yeri_nihongo.review.dto.response.*;
 import yeri_nihongo.review.repository.ReviewRepository;
 
 import java.util.List;
@@ -30,7 +27,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewDetailResponse getReviewByReviewId(Long reviewId) {
         Review review = commonService.getReviewByReviewId(reviewId);
 
-        return getReviewDetail(review);
+        return getReviewDetailResponse(review, ReviewConverter::toReviewDetailResponse);
     }
 
     @Override
@@ -58,7 +55,18 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewDetailResponse> getMainReviewsByCourse() {
         List<Review> reviews = reviewRepository.getMainReviewByCourseInfoId();
         List<ReviewDetailResponse> responses = reviews.stream()
-                .map(review -> getReviewDetail(review))
+                .map(review -> getReviewDetailResponse(review, ReviewConverter::toReviewDetailResponse))
+                .toList();
+
+        return responses;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewForAdminResponse> getReviewsForAdmin() {
+        List<Review> reviews = reviewRepository.findAll();
+        List<ReviewForAdminResponse> responses = reviews.stream()
+                .map(review -> (ReviewForAdminResponse) getReviewDetailResponse(review, ReviewConverter::toReviewForAdminResponse))
                 .toList();
 
         return responses;
@@ -85,11 +93,19 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.getNameByReviewId(reviewId);
     }
 
-    private ReviewDetailResponse getReviewDetail(Review review) {
+    private ReviewDetailResponse getReviewDetailResponse(
+            Review review,
+            QuadFunction<CourseInfo, Review, List<String>, String, ReviewDetailResponse> applier
+    ) {
         CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(review.getCourseInfo().getId());
         List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(review.getId());
         String writer = getNameByReviewId(review.getId());
 
-        return ReviewConverter.toReviewDetailResponse(courseInfo, review, imageUrls, writer);
+        return applier.apply(courseInfo, review, imageUrls, writer);
+    }
+
+    @FunctionalInterface
+    private interface QuadFunction<T, U, V, W, R> {
+        R apply(T t, U u, V v, W w);
     }
 }

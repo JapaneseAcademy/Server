@@ -4,10 +4,7 @@ import org.springframework.data.domain.Page;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.exception.review.ReviewMappingException;
 import yeri_nihongo.review.domain.Review;
-import yeri_nihongo.review.dto.response.ReviewDetailResponse;
-import yeri_nihongo.review.dto.response.ReviewListResponse;
-import yeri_nihongo.review.dto.response.ReviewProjection;
-import yeri_nihongo.review.dto.response.ReviewResponse;
+import yeri_nihongo.review.dto.response.*;
 
 import java.util.List;
 
@@ -61,6 +58,28 @@ public class ReviewConverter {
                     .totalElements(responses.getTotalElements())
                     .isFirst(responses.isFirst())
                     .isLast(responses.isLast())
+                    .build();
+        } catch (Exception e) {
+            throw new ReviewMappingException();
+        }
+    }
+
+    public static ReviewForAdminResponse toReviewForAdminResponse(
+            CourseInfo courseInfo, Review review, List<String> imageUrls, String writer
+    ) {
+        try {
+            return ReviewForAdminResponse.adminBuilder()
+                    .courseInfoId(courseInfo.getId())
+                    .courseTitle(courseInfo.getTitle())
+                    .reviewId(review.getId())
+                    .reviewTitle(review.getTitle())
+                    .review(review.getReview())
+                    .imageUrls(imageUrls)
+                    .writer(writer)
+                    .createdDate(review.getCreatedAt().toLocalDate())
+                    .isForMain(review.getIsForMain())
+                    .isBest(review.getIsBest())
+                    .isVisible(review.getIsVisible())
                     .build();
         } catch (Exception e) {
             throw new ReviewMappingException();
