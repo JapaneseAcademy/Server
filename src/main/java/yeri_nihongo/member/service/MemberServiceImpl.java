@@ -13,8 +13,11 @@ import yeri_nihongo.exception.member.UserNotFoundException;
 import yeri_nihongo.member.converter.MemberConverter;
 import yeri_nihongo.member.domain.Member;
 import yeri_nihongo.member.domain.Role;
+import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.dto.response.MemberResponse;
 import yeri_nihongo.member.repository.MemberRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +54,16 @@ public class MemberServiceImpl implements MemberService{
                 .orElseThrow(() -> new UserNotFoundException(memberId));
 
         return MemberConverter.toMemberResponse(member);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemberForAdminResponse> getAllStudents() {
+        List<Member> members = memberRepository.findAllStudent();
+
+        return members.stream()
+                .map(MemberConverter::toMemberForAdminResponse)
+                .toList();
     }
 
     private void validateMemberDoesNotExist(String loginId) {
