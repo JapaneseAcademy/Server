@@ -88,7 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewDetailResponse getReviewDetail(Review review) {
         CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(review.getCourseInfo().getId());
         List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(review.getId());
-        String writer = reviewRepository.getNameByReviewId(review.getId());
+        String writer = getNameByReviewId(review.getId());
 
         return ReviewConverter.toReviewDetailResponse(courseInfo, review, imageUrls, writer);
     }

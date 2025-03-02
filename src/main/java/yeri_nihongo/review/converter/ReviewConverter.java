@@ -17,9 +17,10 @@ public class ReviewConverter {
             CourseInfo courseInfo, Review review, List<String> imageUrls, String writer
     ) {
         try {
-            return ReviewDetailResponse.builder()
+            return ReviewDetailResponse.detailBuilder()
                     .courseInfoId(courseInfo.getId())
                     .courseTitle(courseInfo.getTitle())
+                    .reviewId(review.getId())
                     .reviewTitle(review.getTitle())
                     .review(review.getReview())
                     .imageUrls(imageUrls)

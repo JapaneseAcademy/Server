@@ -7,14 +7,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@Builder
-public class ReviewDetailResponse {
+public class ReviewDetailResponse extends ReviewResponse {
 
     private Long courseInfoId;
     private String courseTitle;
-    private String reviewTitle;
-    private String review;
-    private List<String> imageUrls;
-    private String writer;
-    private LocalDate createdDate;
+
+    @Builder(builderMethodName = "detailBuilder")
+    public ReviewDetailResponse(Long reviewId, String reviewTitle, String review, List<String> imageUrls, String writer, LocalDate createdDate, Long courseInfoId, String courseTitle) {
+        super(reviewId, reviewTitle, review, imageUrls, writer, createdDate);
+        this.courseInfoId = courseInfoId;
+        this.courseTitle = courseTitle;
+    }
 }
