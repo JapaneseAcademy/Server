@@ -25,8 +25,6 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
 
     String[] publicEndpoints= {
-            "/h2-console/**",
-            "/api/v1/test/**",
             "/api/v1/auth/**"
     };
 
@@ -38,8 +36,7 @@ public class SecurityConfig {
     };
 
     String[] forInstructorEndpoints = {
-            "/api/v1/courses",
-            "/api/v1/auth/token",
+            "/api/v1/admin/**"
     };
 
     @Bean
@@ -50,7 +47,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, publicGetEndpoints).permitAll()
-                        .requestMatchers(HttpMethod.POST, forInstructorEndpoints).hasAuthority("ROLE_INSTRUCTOR")
+                        .requestMatchers(forInstructorEndpoints).hasAuthority("ROLE_INSTRUCTOR")
                         .requestMatchers(publicEndpoints).permitAll() // 여러 경로를 한 줄로 그룹화
                         .anyRequest().authenticated() // 나머지 요청 인증 필요
                 )
