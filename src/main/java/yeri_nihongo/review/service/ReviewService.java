@@ -17,4 +17,6 @@ public interface ReviewService {
     List<ReviewDetailResponse> getMainReviewsByCourse();
 
     List<ReviewForAdminResponse> getReviewsForAdmin();
+
+    void toggleVisibility(Long reviewId);
 }

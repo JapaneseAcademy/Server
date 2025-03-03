@@ -43,10 +43,19 @@ public class AdminController {
 
     @GetMapping("/courses")
     public ResponseEntity<List<CourseForAdminResponse>> getCoursesForAdmin(
-            @RequestParam CourseFilter filter
+            @RequestParam("filter") CourseFilter filter
     ) {
         List<CourseForAdminResponse> responses = courseService.getCoursesForAdmin(filter);
 
         return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping("/reviews/visibility")
+    public ResponseEntity<?> toggleVisibility(
+            @RequestParam("reviewId") Long reviewId
+    ) {
+        reviewService.toggleVisibility(reviewId);
+
+        return ResponseEntity.ok().build();
     }
 }

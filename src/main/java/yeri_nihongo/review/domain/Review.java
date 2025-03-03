@@ -50,4 +50,16 @@ public class Review extends BaseTimeEntity {
         this.review = review;
         this.isAnonymous = isAnonymous;
     }
+
+    public void toggleVisibility() {
+        this.isVisible = !this.isVisible;
+    }
+
+    public void toggleForMain() {
+        this.isForMain = !this.isForMain;
+    }
+
+    public void toggleBest() {
+        this.isBest = !this.isBest;
+    }
 }
