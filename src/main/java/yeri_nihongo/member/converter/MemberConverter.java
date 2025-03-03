@@ -27,7 +27,7 @@ public class MemberConverter {
                     .name(member.getName())
                     .phone(member.getPhone())
                     .birth(member.getBirth())
-                    .notes(member.getNotes())
+                    .note(member.getNote())
                     .build();
         } catch (Exception e) {
             throw new UserMappingException();

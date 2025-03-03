@@ -8,11 +8,11 @@ import java.time.LocalDate;
 @Getter
 public class MemberForAdminResponse extends MemberResponse {
 
-    private String notes;
+    private String note;
 
     @Builder(builderMethodName = "adminBuilder")
-    public MemberForAdminResponse(Long id, String name, String phone, LocalDate birth, String notes) {
+    public MemberForAdminResponse(Long id, String name, String phone, LocalDate birth, String note) {
         super(id, name, phone, birth);
-        this.notes = notes;
+        this.note = note;
     }
 }

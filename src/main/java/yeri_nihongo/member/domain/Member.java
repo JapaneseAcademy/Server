@@ -34,7 +34,7 @@ public class Member extends BaseTimeEntity {
     private Role role;
 
     @Column(length = 500)
-    private String notes;
+    private String note;
 
 
     @Builder
