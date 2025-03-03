@@ -109,7 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private String getNameByReviewId(Long reviewId) {
         if (commonService.getReviewByReviewId(reviewId).getIsAnonymous()) {
-            return "익명";
+            return "*****";
         }
         return reviewRepository.getNameByReviewId(reviewId);
     }
