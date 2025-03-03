@@ -1,6 +1,6 @@
 package yeri_nihongo.time.converter;
 
-import yeri_nihongo.exception.course.TimeTableMappingException;
+import yeri_nihongo.exception.time.TimeTableMappingException;
 import yeri_nihongo.time.domain.TimeBlock;
 import yeri_nihongo.time.domain.TimeTable;
 import yeri_nihongo.time.dto.response.TimeBlockResponse;

@@ -1,4 +1,4 @@
-package yeri_nihongo.exception.course;
+package yeri_nihongo.exception.time;
 
 import org.springframework.http.HttpStatus;
 import yeri_nihongo.exception.common.BaseException;
