@@ -19,4 +19,6 @@ public interface ReviewService {
     List<ReviewForAdminResponse> getReviewsForAdmin();
 
     void toggleVisibility(Long reviewId);
+
+    void toggleBest(Long reviewId);
 }

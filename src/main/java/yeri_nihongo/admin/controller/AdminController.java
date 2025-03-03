@@ -58,4 +58,13 @@ public class AdminController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/reviews/best")
+    public ResponseEntity<?> toggleBest(
+            @RequestParam("reviewId") Long reviewId
+    ) {
+        reviewService.toggleBest(reviewId);
+
+        return ResponseEntity.ok().build();
+    }
 }

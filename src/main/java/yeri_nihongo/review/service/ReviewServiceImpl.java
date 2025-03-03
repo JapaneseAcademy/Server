@@ -79,6 +79,13 @@ public class ReviewServiceImpl implements ReviewService {
         review.toggleVisibility();
     }
 
+    @Override
+    @Transactional
+    public void toggleBest(Long reviewId) {
+        Review review = commonService.getReviewByReviewId(reviewId);
+        review.toggleBest();
+    }
+
     private ReviewListResponse processReview(Supplier<Page<ReviewProjection>> supplier, Pageable pageable) {
         Page<ReviewProjection> reviewProjections = supplier.get();
         List<ReviewResponse> responses = reviewProjections.stream()
