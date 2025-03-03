@@ -21,4 +21,6 @@ public interface ReviewService {
     void toggleVisibility(Long reviewId);
 
     void toggleBest(Long reviewId);
+
+    void toggleForMain(Long reviewId);
 }

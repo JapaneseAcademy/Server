@@ -67,4 +67,13 @@ public class AdminController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/reviews/main")
+    public ResponseEntity<?> toggleForMain(
+            @RequestParam("reviewId") Long reviewId
+    ) {
+        reviewService.toggleForMain(reviewId);
+
+        return ResponseEntity.ok().build();
+    }
 }
