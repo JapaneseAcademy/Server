@@ -21,7 +21,7 @@ public class CourseInfo {
     @Column(nullable = false)
     private Integer cost;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     private String mainImageUrl;
 
     @Column(nullable = false)
