@@ -8,4 +8,6 @@ import java.util.List;
 public interface CourseCustomRepository {
 
     List<Course> searchWithFilter(CourseFilter filters);
+
+    Course findCurrentCourseByCourseInfoId(Long courseInfoId);
 }

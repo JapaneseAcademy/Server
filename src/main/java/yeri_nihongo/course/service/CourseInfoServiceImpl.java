@@ -29,9 +29,9 @@ public class CourseInfoServiceImpl implements CourseInfoService {
     public CourseInfoResponse getCourseInfoByCourseInfoId(Long courseInfoId) {
         CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(courseInfoId);
         List<String> descriptionImageUrls = descriptionRepository.getDescriptionImageUrlsByCourseInfoId(courseInfo.getId());
-        List<CourseResponse> courses = courseService.getCoursesByCourseInfoId(courseInfo.getId());
+        CourseResponse course = courseService.getCurrentCourseByCourseInfoId(courseInfo.getId());
 
-        return CourseConverter.toCourseInfoResponse(courseInfo, descriptionImageUrls, courses);
+        return CourseConverter.toCourseInfoResponse(courseInfo, descriptionImageUrls, course);
     }
 
     @Override

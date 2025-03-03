@@ -14,7 +14,7 @@ import java.util.List;
 public class CourseConverter {
 
     public static CourseInfoResponse toCourseInfoResponse(
-            CourseInfo courseInfo, List<String> descriptions, List<CourseResponse> courses
+            CourseInfo courseInfo, List<String> descriptions, CourseResponse course
     ) {
         try {
             return CourseInfoResponse.builder()
@@ -27,7 +27,7 @@ public class CourseConverter {
                     .isRecorded(courseInfo.getIsRecorded())
                     .descriptions(descriptions)
                     .level(courseInfo.getLevel())
-                    .courses(courses)
+                    .course(course)
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();

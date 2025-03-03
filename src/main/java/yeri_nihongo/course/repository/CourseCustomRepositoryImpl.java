@@ -35,4 +35,18 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
                 .where(builder)
                 .fetch();
     }
+
+    @Override
+    public Course findCurrentCourseByCourseInfoId(Long courseInfoId) {
+        QCourse course = QCourse.course;
+        LocalDate date = LocalDate.now();
+
+        return queryFactory
+                .selectFrom(course)
+                .where(course.courseInfo.id.eq(courseInfoId)
+                        .and(course.startDate.gt(date)))
+                .orderBy(course.startDate.asc())
+                .limit(1)
+                .fetchOne();
+    }
 }

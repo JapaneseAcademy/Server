@@ -23,18 +23,6 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
 
     @Override
-    public List<CourseResponse> getCoursesByCourseInfoId(Long courseInfoId) {
-        List<Course> courses = courseRepository.findCoursesByCourseInfoId(courseInfoId);
-        List<CourseResponse> courseResponses = courses.stream()
-                .map(course -> {
-                    List<TimeTableResponse> timeTables = timeTableService.getTimeTablesByCourseId(course.getId());
-                    return CourseConverter.toCourseResponse(course, timeTables);
-                })
-                .toList();
-        return courseResponses;
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<CourseForAdminResponse> getCoursesForAdmin(CourseFilter filter) {
         List<Course> courses = courseRepository.searchWithFilter(filter);
@@ -51,5 +39,14 @@ public class CourseServiceImpl implements CourseService {
                 .toList();
 
         return responses;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CourseResponse getCurrentCourseByCourseInfoId(Long courseInfoId) {
+        Course course = courseRepository.findCurrentCourseByCourseInfoId(courseInfoId);
+        List<TimeTableResponse> timeTableResponses = timeTableService.getTimeTablesByCourseId(course.getId());
+
+        return CourseConverter.toCourseResponse(course, timeTableResponses);
     }
 }

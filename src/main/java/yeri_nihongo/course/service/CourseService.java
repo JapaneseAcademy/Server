@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CourseService {
 
-    List<CourseResponse> getCoursesByCourseInfoId(Long courseInfoId);
-
     List<CourseForAdminResponse> getCoursesForAdmin(CourseFilter filter);
+
+    CourseResponse getCurrentCourseByCourseInfoId(Long courseInfoId);
 }
