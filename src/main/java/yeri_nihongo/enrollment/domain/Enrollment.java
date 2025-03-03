@@ -32,7 +32,7 @@ public class Enrollment extends BaseTimeEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private TimeTable timeTable;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @Column(nullable = false)

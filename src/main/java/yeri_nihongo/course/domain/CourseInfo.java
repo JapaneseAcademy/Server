@@ -33,6 +33,6 @@ public class CourseInfo {
     @Column(nullable = false)
     private Boolean isRecorded;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Level level;
 }
