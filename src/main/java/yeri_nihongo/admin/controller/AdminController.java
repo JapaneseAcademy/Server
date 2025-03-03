@@ -43,7 +43,7 @@ public class AdminController {
 
     @GetMapping("/courses")
     public ResponseEntity<List<CourseForAdminResponse>> getCoursesForAdmin(
-            @RequestBody CourseFilter filter
+            @RequestParam CourseFilter filter
     ) {
         List<CourseForAdminResponse> responses = courseService.getCoursesForAdmin(filter);
 
