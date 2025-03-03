@@ -34,4 +34,9 @@ public class TimeTableServiceImpl implements TimeTableService {
 
         return timeTableResponses;
     }
+
+    @Override
+    public int getStudentCountByTimeTableId(Long timeTableId) {
+        return timeTableRepository.findStudentCountByTimeTableId(timeTableId);
+    }
 }

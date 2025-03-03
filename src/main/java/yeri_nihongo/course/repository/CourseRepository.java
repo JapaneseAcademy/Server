@@ -9,10 +9,16 @@ import yeri_nihongo.course.domain.Course;
 import java.util.List;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long>, CourseCustomRepository {
 
     @Query("SELECT c " +
             "FROM Course c " +
             "WHERE c.courseInfo.id = :courseInfoId")
     List<Course> findCoursesByCourseInfoId(@Param("courseInfoId") Long courseInfoId);
+
+    @Query("SELECT ci.title " +
+            "FROM Course c " +
+            "JOIN c.courseInfo ci ON c.courseInfo.id = ci.id " +
+            "WHERE c.id = :courseId")
+    String findCourseTitleByCourseId(@Param("courseId") Long courseId);
 }

@@ -2,6 +2,7 @@ package yeri_nihongo.course.converter;
 
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseInfoResponse;
 import yeri_nihongo.course.dto.response.CourseListResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
@@ -60,6 +61,24 @@ public class CourseConverter {
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
                     .mainImageUrl(courseInfo.getMainImageUrl())
+                    .level(courseInfo.getLevel())
+                    .build();
+        } catch (Exception e) {
+            throw new CourseMappingException();
+        }
+    }
+
+    public static CourseForAdminResponse toCourseForAdminResponse(
+            Course course, TimeTableResponse timeTable, int studentCount, String title
+    ) {
+        try {
+            return CourseForAdminResponse.builder()
+                    .courseId(course.getId())
+                    .startDate(course.getStartDate())
+                    .endDate(course.getEndDate())
+                    .title(title)
+                    .studentCount(studentCount)
+                    .timeTable(timeTable)
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();

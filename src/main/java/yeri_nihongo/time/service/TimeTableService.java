@@ -7,4 +7,6 @@ import java.util.List;
 public interface TimeTableService {
 
     List<TimeTableResponse> getTimeTablesByCourseId(Long courseId);
+
+    int getStudentCountByTimeTableId(Long timeTableId);
 }
