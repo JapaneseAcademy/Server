@@ -8,7 +8,10 @@ import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.review.converter.ReviewConverter;
 import yeri_nihongo.review.domain.Review;
-import yeri_nihongo.review.dto.response.*;
+import yeri_nihongo.review.dto.response.ReviewDetailResponse;
+import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
+import yeri_nihongo.review.dto.response.ReviewListResponse;
+import yeri_nihongo.review.dto.response.ReviewResponse;
 import yeri_nihongo.review.repository.ReviewRepository;
 
 import java.util.List;
@@ -64,7 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional(readOnly = true)
     public List<ReviewForAdminResponse> getReviewsForAdmin() {
-        List<Review> reviews = reviewRepository.findAll();
+        List<Review> reviews = reviewRepository.findAllByOrderByCreatedAtDesc();
         List<ReviewForAdminResponse> responses = reviews.stream()
                 .map(review -> (ReviewForAdminResponse) getReviewDetailResponse(review, ReviewConverter::toReviewForAdminResponse))
                 .toList();
@@ -93,8 +96,8 @@ public class ReviewServiceImpl implements ReviewService {
         review.toggleForMain();
     }
 
-    private ReviewListResponse processReview(Supplier<Page<ReviewProjection>> supplier, Pageable pageable) {
-        Page<ReviewProjection> reviewProjections = supplier.get();
+    private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
+        Page<Review> reviewProjections = supplier.get();
         List<ReviewResponse> responses = reviewProjections.stream()
                 .map(reviewProjection -> {
                     List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(reviewProjection.getId());

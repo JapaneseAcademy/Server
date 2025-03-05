@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import yeri_nihongo.review.domain.Review;
-import yeri_nihongo.review.dto.response.ReviewProjection;
 
 import java.util.List;
 
@@ -27,18 +26,20 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "WHERE r.id = :reviewId")
     String getNameByReviewId(@Param("reviewId") Long reviewId);
 
-    @Query("SELECT r.id AS id, r.title AS title, r.review AS review, r.createdAt AS createdAt " +
+    @Query("SELECT r " +
             "FROM Review r " +
             "WHERE r.isVisible = true and r.courseInfo.id = :courseInfoId")
-    Page<ReviewProjection> getReviewByCourseInfoId(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
+    Page<Review> getReviewByCourseInfoId(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
 
-    @Query("SELECT r.id AS id, r.title AS title, r.review AS review, r.createdAt AS createdAt " +
+    @Query("SELECT r " +
             "FROM Review r " +
             "WHERE r.isBest = true and r.courseInfo.id = :courseInfoId")
-    Page<ReviewProjection> getBestReviewByCourseInfoId(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
+    Page<Review> getBestReviewByCourseInfoId(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
 
     @Query("SELECT r " +
             "FROM Review r " +
             "WHERE r.isForMain = true")
     List<Review> getMainReviewByCourseInfoId();
+
+    List<Review> findAllByOrderByCreatedAtDesc();
 }
