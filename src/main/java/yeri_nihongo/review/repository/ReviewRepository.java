@@ -38,8 +38,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r " +
             "FROM Review r " +
-            "WHERE r.isForMain = true")
-    List<Review> getMainReviewByCourseInfoId();
+            "WHERE r.isForMain = true " +
+            "ORDER BY r.createdAt DESC")
+    List<Review> getMainReview();
 
     List<Review> findAllByOrderByCreatedAtDesc();
 }

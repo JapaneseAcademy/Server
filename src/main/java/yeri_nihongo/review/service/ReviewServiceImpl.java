@@ -36,7 +36,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional(readOnly = true)
     public ReviewListResponse getReviewsByCourseInfoId(Long courseInfoId, Integer page) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(
+                Sort.Order.desc("isBest"),
+                Sort.Order.desc("createdAt")
+        ));
 
         return processReview(() ->
                 reviewRepository.getReviewByCourseInfoId(courseInfoId, pageable), pageable
@@ -55,8 +58,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewDetailResponse> getMainReviewsByCourse() {
-        List<Review> reviews = reviewRepository.getMainReviewByCourseInfoId();
+    public List<ReviewDetailResponse> getMainReviews() {
+        List<Review> reviews = reviewRepository.getMainReview();
         List<ReviewDetailResponse> responses = reviews.stream()
                 .map(review -> getReviewDetailResponse(review, ReviewConverter::toReviewDetailResponse))
                 .toList();
@@ -99,7 +102,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional(readOnly = true)
     public ReviewListResponse getAllReviews(Integer page) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(
+                Sort.Order.desc("isBest"),
+                Sort.Order.desc("createdAt")
+        ));
 
         return processReview(() ->
                 reviewRepository.findAll(pageable), pageable);

@@ -56,7 +56,7 @@ public class ReviewController {
 
     @GetMapping("/reviews/main")
     public ResponseEntity<List<ReviewDetailResponse>> getMainReviews() {
-        List<ReviewDetailResponse> responses = reviewService.getMainReviewsByCourse();
+        List<ReviewDetailResponse> responses = reviewService.getMainReviews();
 
         return ResponseEntity.ok(responses);
     }
