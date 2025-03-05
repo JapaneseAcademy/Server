@@ -10,13 +10,13 @@ import yeri_nihongo.review.service.ReviewService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/reviews")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/{reviewId}")
+    @GetMapping("/reviews/{reviewId}")
     public ResponseEntity<ReviewDetailResponse> getReviewByReviewId(
             @PathVariable Long reviewId
     ) {
@@ -25,9 +25,9 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("")
+    @GetMapping("/courses/{courseInfoId}/reviews")
     public ResponseEntity<ReviewListResponse> getReviewsByCourseInfoId(
-            @RequestParam("courseInfoId") Long courseInfoId,
+            @PathVariable Long courseInfoId,
             @RequestParam(value = "page", defaultValue = "0") Integer page
     ) {
         ReviewListResponse response = reviewService.getReviewsByCourseInfoId(courseInfoId, page);
@@ -35,7 +35,16 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/best")
+    @GetMapping("/reviews")
+    public ResponseEntity<ReviewListResponse> getAllReviews(
+            @RequestParam(value = "page", defaultValue = "0") Integer page
+    ) {
+        ReviewListResponse response = reviewService.getAllReviews(page);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/reviews/best")
     public ResponseEntity<ReviewListResponse> getBestReviewsByCourseInfoId(
             @RequestParam("courseInfoId") Long courseInfoId,
             @RequestParam(value = "page", defaultValue = "0") Integer page
@@ -45,7 +54,7 @@ public class ReviewController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/main")
+    @GetMapping("/reviews/main")
     public ResponseEntity<List<ReviewDetailResponse>> getMainReviews() {
         List<ReviewDetailResponse> responses = reviewService.getMainReviewsByCourse();
 

@@ -96,6 +96,15 @@ public class ReviewServiceImpl implements ReviewService {
         review.toggleForMain();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewListResponse getAllReviews(Integer page) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        return processReview(() ->
+                reviewRepository.findAll(pageable), pageable);
+    }
+
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
         Page<Review> reviewProjections = supplier.get();
         List<ReviewResponse> responses = reviewProjections.stream()

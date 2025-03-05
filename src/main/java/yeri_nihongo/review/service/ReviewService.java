@@ -23,4 +23,6 @@ public interface ReviewService {
     void toggleBest(Long reviewId);
 
     void toggleForMain(Long reviewId);
+
+    ReviewListResponse getAllReviews(Integer page);
 }
