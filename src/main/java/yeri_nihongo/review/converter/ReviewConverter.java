@@ -4,7 +4,10 @@ import org.springframework.data.domain.Page;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.exception.review.ReviewMappingException;
 import yeri_nihongo.review.domain.Review;
-import yeri_nihongo.review.dto.response.*;
+import yeri_nihongo.review.dto.response.ReviewDetailResponse;
+import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
+import yeri_nihongo.review.dto.response.ReviewListResponse;
+import yeri_nihongo.review.dto.response.ReviewResponse;
 
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class ReviewConverter {
     }
 
     public static ReviewResponse toReviewResponse(
-            ReviewProjection review, List<String> imageUrls, String writer
+            Review review, List<String> imageUrls, String writer
     ) {
         try {
             return ReviewResponse.builder()
