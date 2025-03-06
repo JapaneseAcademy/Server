@@ -4,10 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import yeri_nihongo.common.service.CommonService;
+import yeri_nihongo.config.auth.PrincipalDetailsService;
 import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.enrollment.domain.Enrollment;
+import yeri_nihongo.enrollment.service.EnrollmentService;
+import yeri_nihongo.exception.auth.UserForbiddenException;
 import yeri_nihongo.review.converter.ReviewConverter;
 import yeri_nihongo.review.domain.Review;
+import yeri_nihongo.review.dto.request.ReviewCreateRequest;
 import yeri_nihongo.review.dto.response.ReviewDetailResponse;
 import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
 import yeri_nihongo.review.dto.response.ReviewListResponse;
@@ -22,6 +28,8 @@ import java.util.function.Supplier;
 public class ReviewServiceImpl implements ReviewService {
 
     private final CommonService commonService;
+    private final EnrollmentService enrollmentService;
+    private final ReviewImageService reviewImageService;
 
     private final ReviewRepository reviewRepository;
 
@@ -111,6 +119,19 @@ public class ReviewServiceImpl implements ReviewService {
                 reviewRepository.findAll(pageable), pageable);
     }
 
+    @Override
+    @Transactional
+    public void createReview(ReviewCreateRequest request, List<MultipartFile> images) {
+        Enrollment enrollment = commonService.getEnrollmentByEnrollmentId(request.getEnrollmentId());
+        validateOwner(enrollment);
+
+        CourseInfo courseInfo = enrollmentService.getCourseInfoByEnrollmentId(enrollment.getId());
+        Review entity = ReviewConverter.toEntity(request, courseInfo, enrollment);
+
+        Review review = reviewRepository.save(entity);
+        reviewImageService.createReviewImages(review, images);
+    }
+
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
         Page<Review> reviewProjections = supplier.get();
         List<ReviewResponse> responses = reviewProjections.stream()
@@ -146,5 +167,12 @@ public class ReviewServiceImpl implements ReviewService {
     @FunctionalInterface
     private interface QuadFunction<T, U, V, W, R> {
         R apply(T t, U u, V v, W w);
+    }
+
+    private void validateOwner(Enrollment enrollment) {
+        Long memberId = PrincipalDetailsService.getCurrentMemberId();
+        if (memberId != enrollment.getMember().getId()) {
+            throw new UserForbiddenException(memberId);
+        }
     }
 }

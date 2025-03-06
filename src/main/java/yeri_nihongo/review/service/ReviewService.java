@@ -1,5 +1,7 @@
 package yeri_nihongo.review.service;
 
+import org.springframework.web.multipart.MultipartFile;
+import yeri_nihongo.review.dto.request.ReviewCreateRequest;
 import yeri_nihongo.review.dto.response.ReviewDetailResponse;
 import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
 import yeri_nihongo.review.dto.response.ReviewListResponse;
@@ -25,4 +27,6 @@ public interface ReviewService {
     void toggleForMain(Long reviewId);
 
     ReviewListResponse getAllReviews(Integer page);
+
+    void createReview(ReviewCreateRequest request, List<MultipartFile> images);
 }

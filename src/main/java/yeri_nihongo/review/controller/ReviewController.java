@@ -1,8 +1,12 @@
 package yeri_nihongo.review.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import yeri_nihongo.review.dto.request.ReviewCreateRequest;
 import yeri_nihongo.review.dto.response.ReviewDetailResponse;
 import yeri_nihongo.review.dto.response.ReviewListResponse;
 import yeri_nihongo.review.service.ReviewService;
@@ -59,5 +63,15 @@ public class ReviewController {
         List<ReviewDetailResponse> responses = reviewService.getMainReviews();
 
         return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping("/reviews")
+    public ResponseEntity<HttpStatus> createReview(
+            @Valid @RequestPart("request") ReviewCreateRequest request,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        reviewService.createReview(request, images);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
