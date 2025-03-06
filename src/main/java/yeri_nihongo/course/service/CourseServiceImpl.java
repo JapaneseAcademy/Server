@@ -9,6 +9,7 @@ import yeri_nihongo.course.dto.request.CourseFilter;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
 import yeri_nihongo.course.repository.CourseRepository;
+import yeri_nihongo.exception.course.NoScheduledCourseException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 import yeri_nihongo.time.service.TimeTableService;
 
@@ -44,7 +45,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public CourseResponse getCurrentCourseByCourseInfoId(Long courseInfoId) {
-        Course course = courseRepository.findCurrentCourseByCourseInfoId(courseInfoId);
+        Course course = courseRepository.findCurrentCourseByCourseInfoId(courseInfoId)
+                .orElseThrow(() -> new NoScheduledCourseException(courseInfoId));
         List<TimeTableResponse> timeTableResponses = timeTableService.getTimeTablesByCourseId(course.getId());
 
         return CourseConverter.toCourseResponse(course, timeTableResponses);
