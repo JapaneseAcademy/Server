@@ -13,7 +13,7 @@ public class CourseResponse extends CourseBaseResponse {
     private List<TimeTableResponse> timeTables;
 
     @Builder
-    public CourseResponse(Long courseId, LocalDate startDate, LocalDate endDate, Long courseId1, LocalDate startDate1, LocalDate endDate1, List<TimeTableResponse> timeTables) {
+    public CourseResponse(Long courseId, LocalDate startDate, LocalDate endDate, List<TimeTableResponse> timeTables) {
         super(courseId, startDate, endDate);
         this.timeTables = timeTables;
     }
