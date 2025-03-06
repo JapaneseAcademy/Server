@@ -1,11 +1,13 @@
 package yeri_nihongo.admin.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import yeri_nihongo.course.dto.request.CourseFilter;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.service.CourseService;
 import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
@@ -20,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/admin")
 @RequiredArgsConstructor
+@Validated
 public class AdminController {
 
     private final MemberService memberService;
@@ -48,9 +51,12 @@ public class AdminController {
 
     @GetMapping("/courses")
     public ResponseEntity<List<CourseForAdminResponse>> getCoursesForAdmin(
-            @RequestParam("filter") CourseFilter filter
+            @RequestParam("date")
+            @NotBlank(message = "날짜는 필수 입력 사항입니다.")
+            @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])$", message = "올바른 날짜 형식을 입력해주세요. (예: 2025-01)")
+            String date
     ) {
-        List<CourseForAdminResponse> responses = courseService.getCoursesForAdmin(filter);
+        List<CourseForAdminResponse> responses = courseService.getCoursesForAdmin(date);
 
         return ResponseEntity.ok(responses);
     }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.Course;
-import yeri_nihongo.course.dto.request.CourseFilter;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
 import yeri_nihongo.course.repository.CourseRepository;
@@ -25,8 +24,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CourseForAdminResponse> getCoursesForAdmin(CourseFilter filter) {
-        List<Course> courses = courseRepository.searchWithFilter(filter);
+    public List<CourseForAdminResponse> getCoursesForAdmin(String date) {
+        List<Course> courses = courseRepository.searchWithFilter(date);
         List<CourseForAdminResponse> responses = courses.stream()
                 .flatMap(course -> {
                     String title = courseRepository.findCourseTitleByCourseId(course.getId());
