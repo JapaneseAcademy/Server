@@ -2,8 +2,10 @@ package yeri_nihongo.review.converter;
 
 import org.springframework.data.domain.Page;
 import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.exception.review.ReviewMappingException;
 import yeri_nihongo.review.domain.Review;
+import yeri_nihongo.review.dto.request.ReviewCreateRequest;
 import yeri_nihongo.review.dto.response.ReviewDetailResponse;
 import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
 import yeri_nihongo.review.dto.response.ReviewListResponse;
@@ -12,6 +14,18 @@ import yeri_nihongo.review.dto.response.ReviewResponse;
 import java.util.List;
 
 public class ReviewConverter {
+
+    public static Review toEntity(
+            ReviewCreateRequest request, CourseInfo courseInfo, Enrollment enrollment
+    ) {
+        return Review.builder()
+                .enrollment(enrollment)
+                .courseInfo(courseInfo)
+                .title(request.getTitle())
+                .review(request.getReview())
+                .isAnonymous(request.getIsAnonymous())
+                .build();
+    }
 
     public static ReviewDetailResponse toReviewDetailResponse(
             CourseInfo courseInfo, Review review, List<String> imageUrls, String writer
