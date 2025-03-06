@@ -1,5 +1,6 @@
 package yeri_nihongo.enrollment.service;
 
+import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 
@@ -10,4 +11,6 @@ public interface EnrollmentService {
     List<EnrollmentListResponse> getEnrollmentsForUser();
 
     void createEnrollmentByAdmin(CustomEnrollmentRequest request);
+
+    CourseInfo getCourseInfoByEnrollmentId(Long enrollmentId);
 }
