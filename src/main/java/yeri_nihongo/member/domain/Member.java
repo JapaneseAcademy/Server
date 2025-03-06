@@ -45,4 +45,10 @@ public class Member extends BaseTimeEntity {
         this.birth = birth;
         this.role = role;
     }
+
+    public void updateMember(String name, String phone, LocalDate birth) {
+        this.name = name;
+        this.phone = phone;
+        this.birth = birth;
+    }
 }
