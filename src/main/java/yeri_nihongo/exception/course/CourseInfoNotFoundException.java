@@ -7,4 +7,8 @@ public class CourseInfoNotFoundException extends BaseException {
     public CourseInfoNotFoundException(Long courseInfoId) {
         super("CourseInfo not found with id: " + courseInfoId, "COURSE_INFO_NOT_FOUND", HttpStatus.NOT_FOUND);
     }
+
+    public CourseInfoNotFoundException(String enrollmentId) {
+        super("CourseInfo not found with " + enrollmentId, "COURSE_INFO_NOT_FOUND", HttpStatus.NOT_FOUND);
+    }
 }
