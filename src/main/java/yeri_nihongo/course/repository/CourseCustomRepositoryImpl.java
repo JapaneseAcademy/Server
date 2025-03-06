@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.domain.QCourse;
-import yeri_nihongo.course.dto.request.CourseFilter;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -20,17 +19,15 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Course> searchWithFilter(CourseFilter filter) {
+    public List<Course> searchWithFilter(String filter) {
         BooleanBuilder builder = new BooleanBuilder();
         QCourse course = QCourse.course;
 
-        if (filter.getDate() != null) {
-            LocalDate date = filter.getDate();
-            int year = date.getYear();
-            int month = date.getMonthValue();
+        String[] date = filter.split("-");
+        int year = Integer.parseInt(date[0]);
+        int month = Integer.parseInt(date[1]);
 
-            builder.and(course.startDate.year().eq(year).and(course.startDate.month().eq(month)));
-        }
+        builder.and(course.startDate.year().eq(year).and(course.startDate.month().eq(month)));
 
         return queryFactory
                 .selectFrom(course)
@@ -39,22 +36,9 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
     }
 
     @Override
-//    public Course findCurrentCourseByCourseInfoId(Long courseInfoId) {
-//        QCourse course = QCourse.course;
-//        LocalDate date = LocalDate.now();
-//
-//        return queryFactory
-//                .selectFrom(course)
-//                .where(course.courseInfo.id.eq(courseInfoId)
-//                        .and(course.startDate.gt(date)))
-//                .orderBy(course.startDate.asc())
-//                .limit(1)
-//                .fetchOne();
-//    }
     public Optional<Course> findCurrentCourseByCourseInfoId(Long courseInfoId) {
         QCourse course = QCourse.course;
-//        LocalDate today = LocalDate.now();
-        LocalDate today = LocalDate.now().plusDays(15);
+        LocalDate today = LocalDate.now();
         int dayOfMonth = today.getDayOfMonth();
 
         LocalDate targetMonth = (dayOfMonth <= 19) ? today : today.plusMonths(1);
