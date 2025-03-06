@@ -1,6 +1,7 @@
 package yeri_nihongo.auth.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,9 +34,14 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
     private final MemberRepository memberRepository;
     private final AuthTokenGenerator authTokenGenerator;
 
-    public LoginResponse kakaoLogin(KakaoOAuthRequest request) {
+    @Override
+    public LoginResponse kakaoLogin(KakaoOAuthRequest request, HttpServletRequest httpRequest) {
+
+        //0.
+        String redirectUri = getRedirectUri(httpRequest);
+
         // 1. 카카오 액세스 토큰 발급
-        String accessToken = getAccessToken(request.getAuthorizationCode());
+        String accessToken = getAccessToken(request.getAuthorizationCode(), redirectUri);
 
         // 2. 액세스 토큰을 이용해 카카오 id 정보 획득
         Long userId = getKakaoId(accessToken);
@@ -44,7 +50,7 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
         return login(userId);
     }
 
-    public String getAccessToken(String authorizationCode) {
+    private String getAccessToken(String authorizationCode, String redirectUri) {
         WebClient webClient = WebClient.builder().build();
 
         KakaoOAuthTokenResponse tokenResponse = webClient.post()
@@ -65,7 +71,17 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
         return tokenResponse.getAccessToken();
     }
 
-    public Long getKakaoId(String accessToken) {
+    private String getRedirectUri(HttpServletRequest httpRequest) {
+        String origin = httpRequest.getHeader("Origin");
+
+        if (origin.equals("http://localhost:5173")) {
+            return "http://localhost:5173";
+        } else {
+            return redirectUri;
+        }
+    }
+
+    private Long getKakaoId(String accessToken) {
         KakaoUser kakaoUser = WebClient.create()
                 .get()
                 .uri("https://kapi.kakao.com/v2/user/me")
@@ -77,7 +93,7 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
         return kakaoUser.getId();
     }
 
-    public LoginResponse login(Long userId) {
+    private LoginResponse login(Long userId) {
         String loginId = provider + userId;
 
         return memberRepository.findByLoginId(loginId)

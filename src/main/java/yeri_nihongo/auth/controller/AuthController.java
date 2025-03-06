@@ -1,5 +1,6 @@
 package yeri_nihongo.auth.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,11 @@ public class AuthController {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<LoginResponse> kakaoLogin(@RequestBody KakaoOAuthRequest request) {
-        LoginResponse loginResponse = kakaoOAuthService.kakaoLogin(request);
+    public ResponseEntity<LoginResponse> kakaoLogin(
+            @RequestBody KakaoOAuthRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        LoginResponse loginResponse = kakaoOAuthService.kakaoLogin(request, httpRequest);
 
         return ResponseEntity.ok(loginResponse);
     }
