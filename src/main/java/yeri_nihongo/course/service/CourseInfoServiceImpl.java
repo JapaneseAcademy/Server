@@ -38,15 +38,8 @@ public class CourseInfoServiceImpl implements CourseInfoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CourseListResponse> getCoursesWithFilter(String level) {
-        List<CourseInfo> courseInfos;
-
-        if (level.equals("ALL")) {
-            courseInfos = courseInfoRepository.findAll();
-        } else {
-            Level validatedLevel = validateLevel(level);
-            courseInfos = courseInfoRepository.findCourseInfosByLevel(validatedLevel);
-        }
+    public List<CourseListResponse> getAllCourseInfos() {
+        List<CourseInfo> courseInfos = courseInfoRepository.findAll();
 
         return courseInfos.stream()
                 .map(CourseConverter::toCourseListResponse)

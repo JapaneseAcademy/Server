@@ -9,5 +9,5 @@ public interface CourseInfoService {
 
     CourseInfoResponse getCourseInfoByCourseInfoId(Long courseInfoId);
 
-    List<CourseListResponse> getCoursesWithFilter(String level);
+    List<CourseListResponse> getAllCourseInfos();
 }

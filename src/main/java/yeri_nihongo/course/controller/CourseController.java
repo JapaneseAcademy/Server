@@ -29,8 +29,8 @@ public class CourseController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<CourseListResponse>> getAllCourses(String level) {
-        List<CourseListResponse> responses = courseInfoService.getCoursesWithFilter(level);
+    public ResponseEntity<List<CourseListResponse>> getAllCourses() {
+        List<CourseListResponse> responses = courseInfoService.getAllCourseInfos();
 
         return ResponseEntity.ok(responses);
     }
