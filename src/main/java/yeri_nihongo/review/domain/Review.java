@@ -34,7 +34,7 @@ public class Review extends BaseTimeEntity {
     @Column(nullable = false, length = 30)
     private String title;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 1000)
     private String review;
 
     private Boolean isAnonymous;
