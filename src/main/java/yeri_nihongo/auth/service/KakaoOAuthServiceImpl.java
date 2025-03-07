@@ -28,6 +28,9 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
     @Value("${oauth.kakao.redirect-uri}")
     private String redirectUri;
 
+    @Value("${oauth.kakao.redirect-admin-uri}")
+    private String redirectUriForAdmin;
+
     @Value("${oauth.kakao.client-secret}")
     private String clientSecret;
 
@@ -42,6 +45,18 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
 
         // 1. 카카오 액세스 토큰 발급
         String accessToken = getAccessToken(request.getAuthorizationCode(), redirectUri);
+
+        // 2. 액세스 토큰을 이용해 카카오 id 정보 획득
+        Long userId = getKakaoId(accessToken);
+
+        // 3. 로그인(jwt 토큰 발급)
+        return login(userId);
+    }
+
+    @Override
+    public LoginResponse kakaoLoginForAdmin(KakaoOAuthRequest request) {
+        // 1. 카카오 액세스 토큰 발급
+        String accessToken = getAccessToken(request.getAuthorizationCode(), redirectUriForAdmin);
 
         // 2. 액세스 토큰을 이용해 카카오 id 정보 획득
         Long userId = getKakaoId(accessToken);

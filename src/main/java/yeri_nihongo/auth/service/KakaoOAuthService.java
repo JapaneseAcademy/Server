@@ -8,4 +8,6 @@ import yeri_nihongo.auth.dto.response.LoginResponse;
 public interface KakaoOAuthService {
 
     LoginResponse kakaoLogin(KakaoOAuthRequest request, HttpServletRequest httpRequest);
+
+    LoginResponse kakaoLoginForAdmin(KakaoOAuthRequest request);
 }

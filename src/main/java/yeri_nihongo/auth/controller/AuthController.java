@@ -40,6 +40,15 @@ public class AuthController {
         return ResponseEntity.ok(loginResponse);
     }
 
+    @PostMapping("/kakao/admin")
+    public ResponseEntity<LoginResponse> kakaoLogin(
+            @RequestBody KakaoOAuthRequest request
+    ) {
+        LoginResponse loginResponse = kakaoOAuthService.kakaoLoginForAdmin(request);
+
+        return ResponseEntity.ok(loginResponse);
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponse> refresh(@RequestHeader("Authorization") String authorizationHeader, @Valid @RequestBody RefreshTokenRequest request) {
         RefreshTokenResponse response = authService.refresh(authorizationHeader, request);
