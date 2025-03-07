@@ -12,6 +12,7 @@ import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.service.CourseService;
 import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
 import yeri_nihongo.enrollment.service.EnrollmentService;
+import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.service.MemberService;
 import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
@@ -95,5 +96,14 @@ public class AdminController {
         enrollmentService.createEnrollmentByAdmin(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/courses/students")
+    public ResponseEntity<List<CourseStudentResponse>> getStudentsByTimeTableId(
+            @RequestParam("timeTableId") Long timeTableId
+    ) {
+        List<CourseStudentResponse> responses = memberService.getStudentsByTimeTableId(timeTableId);
+
+        return ResponseEntity.ok(responses);
     }
 }

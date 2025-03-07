@@ -3,6 +3,7 @@ package yeri_nihongo.member.service;
 import yeri_nihongo.auth.dto.request.JoinRequest;
 import yeri_nihongo.auth.dto.response.LoginResponse;
 import yeri_nihongo.member.dto.request.MemberUpdateRequest;
+import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.dto.response.MemberResponse;
 
@@ -17,4 +18,6 @@ public interface MemberService {
     List<MemberForAdminResponse> getAllStudents();
 
     void updateMember(MemberUpdateRequest request);
+
+    List<CourseStudentResponse> getStudentsByTimeTableId(Long timeTableId);
 }

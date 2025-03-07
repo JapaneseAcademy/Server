@@ -9,15 +9,18 @@ import yeri_nihongo.auth.dto.response.LoginResponse;
 import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.config.auth.AuthTokenGenerator;
 import yeri_nihongo.config.auth.PrincipalDetailsService;
+import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.exception.member.UserAlreadyExistsException;
 import yeri_nihongo.exception.member.UserNotFoundException;
 import yeri_nihongo.member.converter.MemberConverter;
 import yeri_nihongo.member.domain.Member;
 import yeri_nihongo.member.domain.Role;
 import yeri_nihongo.member.dto.request.MemberUpdateRequest;
+import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.dto.response.MemberResponse;
 import yeri_nihongo.member.repository.MemberRepository;
+import yeri_nihongo.time.service.TimeTableService;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService{
 
     private final CommonService commonService;
+    private final TimeTableService timeTableService;
 
     private final MemberRepository memberRepository;
     private final AuthTokenGenerator authTokenGenerator;
@@ -76,6 +80,16 @@ public class MemberServiceImpl implements MemberService{
         Long memberId = PrincipalDetailsService.getCurrentMemberId();
         Member member = commonService.getMemberByMemberId(memberId);
         member.updateMember(request.getName(), request.getPhone(), request.getBirth());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CourseStudentResponse> getStudentsByTimeTableId(Long timeTableId) {
+        List<Enrollment> enrollments = timeTableService.getEnrollmentsByTimeTableId(timeTableId);
+
+        return enrollments.stream()
+                .map(MemberConverter::toCourseStudentResponse)
+                .toList();
     }
 
     private void validateMemberDoesNotExist(String loginId) {

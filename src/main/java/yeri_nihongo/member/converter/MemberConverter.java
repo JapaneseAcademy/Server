@@ -1,7 +1,9 @@
 package yeri_nihongo.member.converter;
 
+import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.exception.member.UserMappingException;
 import yeri_nihongo.member.domain.Member;
+import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.dto.response.MemberResponse;
 
@@ -28,6 +30,20 @@ public class MemberConverter {
                     .phone(member.getPhone())
                     .birth(member.getBirth())
                     .note(member.getNote())
+                    .build();
+        } catch (Exception e) {
+            throw new UserMappingException();
+        }
+    }
+
+    public static CourseStudentResponse toCourseStudentResponse(Enrollment enrollment) {
+        try {
+            Member member = enrollment.getMember();
+
+            return CourseStudentResponse.builder()
+                    .name(member.getName())
+                    .phone(member.getPhone())
+                    .paymentDate(enrollment.getPaymentAt().toLocalDate())
                     .build();
         } catch (Exception e) {
             throw new UserMappingException();
