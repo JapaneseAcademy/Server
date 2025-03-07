@@ -12,7 +12,7 @@ public class TossPaymentConfirmResponse {
     private String paymentKey;
     private String orderId;
     private LocalDateTime paymentAt;
-    private int totalAmount;
+    private int paymentAmount;
     private String method;
 
     @Builder
@@ -20,7 +20,7 @@ public class TossPaymentConfirmResponse {
         this.paymentKey = paymentKey;
         this.orderId = orderId;
         this.paymentAt = OffsetDateTime.parse(approvedAt).toLocalDateTime();
-        this.totalAmount = totalAmount;
+        this.paymentAmount = totalAmount;
         this.method = method;
     }
 }
