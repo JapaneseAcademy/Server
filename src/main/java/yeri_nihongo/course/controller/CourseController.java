@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yeri_nihongo.course.dto.response.CourseInfoResponse;
 import yeri_nihongo.course.dto.response.CourseListResponse;
+import yeri_nihongo.course.dto.response.CourseTitleResponse;
 import yeri_nihongo.course.service.CourseInfoService;
 
 import java.util.List;
@@ -31,6 +32,13 @@ public class CourseController {
     @GetMapping("")
     public ResponseEntity<List<CourseListResponse>> getAllCourses() {
         List<CourseListResponse> responses = courseInfoService.getAllCourseInfos();
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/titles")
+    public ResponseEntity<List<CourseTitleResponse>> getAllCourseTitles() {
+        List<CourseTitleResponse> responses = courseInfoService.getAllCourseTitles();
 
         return ResponseEntity.ok(responses);
     }

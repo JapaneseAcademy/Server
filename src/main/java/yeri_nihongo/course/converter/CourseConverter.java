@@ -2,10 +2,7 @@ package yeri_nihongo.course.converter;
 
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.domain.CourseInfo;
-import yeri_nihongo.course.dto.response.CourseForAdminResponse;
-import yeri_nihongo.course.dto.response.CourseInfoResponse;
-import yeri_nihongo.course.dto.response.CourseListResponse;
-import yeri_nihongo.course.dto.response.CourseResponse;
+import yeri_nihongo.course.dto.response.*;
 import yeri_nihongo.exception.course.CourseMappingException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 
@@ -80,6 +77,17 @@ public class CourseConverter {
                     .title(title)
                     .studentCount(studentCount)
                     .timeTable(timeTable)
+                    .build();
+        } catch (Exception e) {
+            throw new CourseMappingException();
+        }
+    }
+
+    public static CourseTitleResponse toCourseTitleResponse(CourseInfo courseInfo) {
+        try {
+            return CourseTitleResponse.builder()
+                    .courseInfoId(courseInfo.getId())
+                    .title(courseInfo.getTitle())
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();
