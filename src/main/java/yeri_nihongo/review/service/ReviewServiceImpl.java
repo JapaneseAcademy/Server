@@ -14,10 +14,7 @@ import yeri_nihongo.exception.auth.UserForbiddenException;
 import yeri_nihongo.review.converter.ReviewConverter;
 import yeri_nihongo.review.domain.Review;
 import yeri_nihongo.review.dto.request.ReviewCreateRequest;
-import yeri_nihongo.review.dto.response.ReviewDetailResponse;
-import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
-import yeri_nihongo.review.dto.response.ReviewListResponse;
-import yeri_nihongo.review.dto.response.ReviewResponse;
+import yeri_nihongo.review.dto.response.*;
 import yeri_nihongo.review.repository.ReviewRepository;
 
 import java.util.List;
@@ -77,13 +74,22 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewForAdminResponse> getReviewsForAdmin() {
-        List<Review> reviews = reviewRepository.findAllByOrderByCreatedAtDesc();
+    public ReviewListForAdminResponse getReviewsForAdminByCourseInfoId(Long courseInfoId, Integer page) {
+        Pageable pageable = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Review> reviews;
+
+        if (courseInfoId == null) {
+            reviews = reviewRepository.findAll(pageable);
+        } else {
+            reviews = reviewRepository.getReviewByCourseInfoId(courseInfoId, pageable);
+        }
+
         List<ReviewForAdminResponse> responses = reviews.stream()
                 .map(review -> (ReviewForAdminResponse) getReviewDetailResponse(review, ReviewConverter::toReviewForAdminResponse))
                 .toList();
 
-        return responses;
+        PageImpl<ReviewForAdminResponse> reviewResponses = new PageImpl<>(responses, pageable, reviews.getTotalElements());
+        return ReviewConverter.toReviewListForAdminResponse(reviewResponses);
     }
 
     @Override
@@ -133,8 +139,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
-        Page<Review> reviewProjections = supplier.get();
-        List<ReviewResponse> responses = reviewProjections.stream()
+        Page<Review> reviews = supplier.get();
+        List<ReviewResponse> responses = reviews.stream()
                 .map(reviewProjection -> {
                     List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(reviewProjection.getId());
                     String writer = getNameByReviewId(reviewProjection.getId());
@@ -142,7 +148,7 @@ public class ReviewServiceImpl implements ReviewService {
                 })
                 .toList();
 
-        PageImpl<ReviewResponse> reviewResponses = new PageImpl<>(responses, pageable, reviewProjections.getTotalElements());
+        PageImpl<ReviewResponse> reviewResponses = new PageImpl<>(responses, pageable, reviews.getTotalElements());
         return ReviewConverter.toReviewListResponse(reviewResponses);
     }
 

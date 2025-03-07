@@ -6,10 +6,7 @@ import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.exception.review.ReviewMappingException;
 import yeri_nihongo.review.domain.Review;
 import yeri_nihongo.review.dto.request.ReviewCreateRequest;
-import yeri_nihongo.review.dto.response.ReviewDetailResponse;
-import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
-import yeri_nihongo.review.dto.response.ReviewListResponse;
-import yeri_nihongo.review.dto.response.ReviewResponse;
+import yeri_nihongo.review.dto.response.*;
 
 import java.util.List;
 
@@ -97,6 +94,22 @@ public class ReviewConverter {
                     .isForMain(review.getIsForMain())
                     .isBest(review.getIsBest())
                     .isVisible(review.getIsVisible())
+                    .build();
+        } catch (Exception e) {
+            throw new ReviewMappingException();
+        }
+    }
+
+    public static ReviewListForAdminResponse toReviewListForAdminResponse(Page<ReviewForAdminResponse> responses) {
+        try {
+            List<ReviewForAdminResponse> reviews = responses.toList();
+            return ReviewListForAdminResponse.builder()
+                    .reviews(reviews)
+                    .listSize(reviews.size())
+                    .totalPage(responses.getTotalPages())
+                    .totalElements(responses.getTotalElements())
+                    .isFirst(responses.isFirst())
+                    .isLast(responses.isLast())
                     .build();
         } catch (Exception e) {
             throw new ReviewMappingException();

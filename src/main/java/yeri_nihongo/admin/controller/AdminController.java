@@ -15,7 +15,7 @@ import yeri_nihongo.enrollment.service.EnrollmentService;
 import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.service.MemberService;
-import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
+import yeri_nihongo.review.dto.response.ReviewListForAdminResponse;
 import yeri_nihongo.review.service.ReviewService;
 
 import java.util.List;
@@ -44,8 +44,11 @@ public class AdminController {
     }
 
     @GetMapping("/reviews")
-    public ResponseEntity<List<ReviewForAdminResponse>> getReviewsForAdmin() {
-        List<ReviewForAdminResponse> responses = reviewService.getReviewsForAdmin();
+    public ResponseEntity<ReviewListForAdminResponse> getReviewsForAdmin(
+            @RequestParam(value = "courseInfoId", required = false) Long courseInfoId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page
+    ) {
+        ReviewListForAdminResponse responses = reviewService.getReviewsForAdminByCourseInfoId(courseInfoId, page);
 
         return ResponseEntity.ok(responses);
     }

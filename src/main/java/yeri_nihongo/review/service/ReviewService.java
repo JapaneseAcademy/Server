@@ -3,7 +3,7 @@ package yeri_nihongo.review.service;
 import org.springframework.web.multipart.MultipartFile;
 import yeri_nihongo.review.dto.request.ReviewCreateRequest;
 import yeri_nihongo.review.dto.response.ReviewDetailResponse;
-import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
+import yeri_nihongo.review.dto.response.ReviewListForAdminResponse;
 import yeri_nihongo.review.dto.response.ReviewListResponse;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface ReviewService {
 
     List<ReviewDetailResponse> getMainReviews();
 
-    List<ReviewForAdminResponse> getReviewsForAdmin();
+    ReviewListForAdminResponse getReviewsForAdminByCourseInfoId(Long courseInfoId, Integer page);
 
     void toggleVisibility(Long reviewId);
 
