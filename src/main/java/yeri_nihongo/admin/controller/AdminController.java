@@ -62,7 +62,7 @@ public class AdminController {
     }
 
     @PostMapping("/reviews/visibility")
-    public ResponseEntity<?> toggleVisibility(
+    public ResponseEntity<HttpStatus> toggleVisibility(
             @RequestParam("reviewId") Long reviewId
     ) {
         reviewService.toggleVisibility(reviewId);
@@ -71,7 +71,7 @@ public class AdminController {
     }
 
     @PostMapping("/reviews/best")
-    public ResponseEntity<?> toggleBest(
+    public ResponseEntity<HttpStatus> toggleBest(
             @RequestParam("reviewId") Long reviewId
     ) {
         reviewService.toggleBest(reviewId);
@@ -80,7 +80,7 @@ public class AdminController {
     }
 
     @PostMapping("/reviews/main")
-    public ResponseEntity<?> toggleForMain(
+    public ResponseEntity<HttpStatus> toggleForMain(
             @RequestParam("reviewId") Long reviewId
     ) {
         reviewService.toggleForMain(reviewId);
