@@ -9,5 +9,5 @@ public interface KakaoOAuthService {
 
     LoginResponse kakaoLogin(KakaoOAuthRequest request, HttpServletRequest httpRequest);
 
-    LoginResponse kakaoLoginForAdmin(KakaoOAuthRequest request);
+    LoginResponse kakaoLoginForAdmin(KakaoOAuthRequest request, HttpServletRequest httpRequest);
 }

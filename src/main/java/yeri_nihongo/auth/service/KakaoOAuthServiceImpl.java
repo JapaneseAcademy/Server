@@ -54,14 +54,14 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
     }
 
     @Override
-    public LoginResponse kakaoLoginForAdmin(KakaoOAuthRequest request) {
-        // 1. 카카오 액세스 토큰 발급
-        String accessToken = getAccessToken(request.getAuthorizationCode(), redirectUriForAdmin);
+    public LoginResponse kakaoLoginForAdmin(KakaoOAuthRequest request, HttpServletRequest httpRequest) {
 
-        // 2. 액세스 토큰을 이용해 카카오 id 정보 획득
+        String redirectUri = getRedirectUriForAdmin(httpRequest);
+
+        String accessToken = getAccessToken(request.getAuthorizationCode(), redirectUri);
+
         Long userId = getKakaoId(accessToken);
 
-        // 3. 로그인(jwt 토큰 발급)
         return login(userId);
     }
 
@@ -93,6 +93,16 @@ public class KakaoOAuthServiceImpl implements KakaoOAuthService{
             return "http://localhost:5173";
         } else {
             return redirectUri;
+        }
+    }
+
+    private String getRedirectUriForAdmin(HttpServletRequest httpRequest) {
+        String origin = httpRequest.getHeader("Origin");
+
+        if (origin.equals("http://localhost:5173")) {
+            return "http://localhost:5173/admin";
+        } else {
+            return redirectUriForAdmin;
         }
     }
 

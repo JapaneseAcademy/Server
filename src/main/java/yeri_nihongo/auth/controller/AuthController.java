@@ -41,10 +41,11 @@ public class AuthController {
     }
 
     @PostMapping("/kakao/admin")
-    public ResponseEntity<LoginResponse> kakaoLogin(
-            @RequestBody KakaoOAuthRequest request
+    public ResponseEntity<LoginResponse> kakaoLoginForAdmin(
+            @RequestBody KakaoOAuthRequest request,
+            HttpServletRequest httpRequest
     ) {
-        LoginResponse loginResponse = kakaoOAuthService.kakaoLoginForAdmin(request);
+        LoginResponse loginResponse = kakaoOAuthService.kakaoLoginForAdmin(request, httpRequest);
 
         return ResponseEntity.ok(loginResponse);
     }
