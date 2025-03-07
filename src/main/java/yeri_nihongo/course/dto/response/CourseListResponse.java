@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import yeri_nihongo.course.domain.Level;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class CourseListResponse {
@@ -12,6 +14,7 @@ public class CourseListResponse {
     private String title;
     private int cost;
     private String mainImageUrl;
+    private List<String> descriptions;
     private boolean isLive;
     private boolean isOnline;
     private boolean isRecorded;

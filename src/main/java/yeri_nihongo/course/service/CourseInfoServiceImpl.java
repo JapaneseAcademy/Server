@@ -40,10 +40,11 @@ public class CourseInfoServiceImpl implements CourseInfoService {
     @Transactional(readOnly = true)
     public List<CourseListResponse> getAllCourseInfos() {
         List<CourseInfo> courseInfos = courseInfoRepository.findAll();
-
         return courseInfos.stream()
-                .map(CourseConverter::toCourseListResponse)
-                .toList();
+                .map(courseInfo -> {
+                    List<String> descriptions = descriptionRepository.getDescriptionImageUrlsByCourseInfoId(courseInfo.getId());
+                    return CourseConverter.toCourseListResponse(courseInfo, descriptions);
+                }).toList();
     }
 
     private Level validateLevel(String level) {
