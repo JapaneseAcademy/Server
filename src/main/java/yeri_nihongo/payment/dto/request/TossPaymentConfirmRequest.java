@@ -2,11 +2,11 @@ package yeri_nihongo.payment.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class TossPaymentConfirmRequest {
 
     @NotEmpty(message = "orderId는 필수 입력 사항입니다.")
