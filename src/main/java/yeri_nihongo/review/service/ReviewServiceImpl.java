@@ -117,6 +117,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public ReviewListResponse getAllReviews(Integer page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(
+                Sort.Order.desc("isForMain"),
                 Sort.Order.desc("isBest"),
                 Sort.Order.desc("createdAt")
         ));
