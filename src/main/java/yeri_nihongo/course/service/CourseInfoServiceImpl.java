@@ -42,10 +42,8 @@ public class CourseInfoServiceImpl implements CourseInfoService {
     public List<CourseListResponse> getAllCourseInfos() {
         List<CourseInfo> courseInfos = courseInfoRepository.findAll();
         return courseInfos.stream()
-                .map(courseInfo -> {
-                    List<String> descriptions = descriptionRepository.getDescriptionImageUrlsByCourseInfoId(courseInfo.getId());
-                    return CourseConverter.toCourseListResponse(courseInfo, descriptions);
-                }).toList();
+                .map(CourseConverter::toCourseListResponse)
+                .toList();
     }
 
     @Override

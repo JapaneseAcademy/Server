@@ -47,7 +47,7 @@ public class CourseConverter {
     }
 
     public static CourseListResponse toCourseListResponse(
-            CourseInfo courseInfo, List<String> descriptions
+            CourseInfo courseInfo
     ) {
         try {
             return CourseListResponse.builder()
@@ -58,7 +58,6 @@ public class CourseConverter {
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
                     .mainImageUrl(courseInfo.getMainImageUrl())
-                    .descriptions(descriptions )
                     .level(courseInfo.getLevel())
                     .build();
         } catch (Exception e) {
