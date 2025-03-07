@@ -1,14 +1,14 @@
 package yeri_nihongo.enrollment.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import yeri_nihongo.enrollment.domain.Category;
 
 import java.time.LocalDate;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class CustomEnrollmentRequest {
 
     @NotNull(message = "수강할 강의 Id는 필수 입력 정보입니다.")
