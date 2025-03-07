@@ -2,6 +2,8 @@ package yeri_nihongo.time.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.time.converter.TimeConverter;
 import yeri_nihongo.time.domain.TimeBlock;
 import yeri_nihongo.time.domain.TimeTable;
@@ -38,5 +40,11 @@ public class TimeTableServiceImpl implements TimeTableService {
     @Override
     public int getStudentCountByTimeTableId(Long timeTableId) {
         return timeTableRepository.findStudentCountByTimeTableId(timeTableId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Enrollment> getEnrollmentsByTimeTableId(Long timeTableId) {
+        return timeTableRepository.findEnrollmentsByTimeTableId(timeTableId);
     }
 }

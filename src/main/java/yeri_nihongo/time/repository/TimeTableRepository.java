@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.time.domain.TimeTable;
 
 import java.util.List;
@@ -28,4 +29,12 @@ public interface TimeTableRepository extends JpaRepository<TimeTable, Long> {
             "JOIN CourseInfo ci ON c.courseInfo.id = ci. id " +
             "WHERE tt.id = :timeTableId")
     CourseInfo findCourseInfoByTimeTableId(@Param("timeTableId") Long timeTableId);
+
+    @Query("SELECT e " +
+            "FROM TimeTable tt " +
+            "JOIN Enrollment e ON tt.id = e.timeTable.id " +
+            "JOIN FETCH Member m ON e.member.id = m.id " +
+            "WHERE tt.id = :timeTableId " +
+            "ORDER BY m.name ASC")
+    List<Enrollment> findEnrollmentsByTimeTableId(@Param("timeTableId") Long timeTableId);
 }
