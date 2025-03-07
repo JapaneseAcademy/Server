@@ -7,10 +7,7 @@ import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.course.domain.Level;
-import yeri_nihongo.course.dto.response.CourseInfoResponse;
-import yeri_nihongo.course.dto.response.CourseListResponse;
-import yeri_nihongo.course.dto.response.CourseResponse;
-import yeri_nihongo.course.dto.response.CourseTitleResponse;
+import yeri_nihongo.course.dto.response.*;
 import yeri_nihongo.course.repository.CourseInfoRepository;
 import yeri_nihongo.course.repository.DescriptionRepository;
 import yeri_nihongo.exception.course.InvalidLevelException;
@@ -54,6 +51,18 @@ public class CourseInfoServiceImpl implements CourseInfoService {
         return courseInfos.stream()
                 .map(CourseConverter::toCourseTitleResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CourseListForAdminResponse> getAllCourseInfosForAdmin() {
+        List<CourseInfo> courseInfos = courseInfoRepository.findAll();
+
+        return courseInfos.stream()
+                .map(courseInfo -> {
+                    List<String> descriptions = descriptionRepository.getDescriptionImageUrlsByCourseInfoId(courseInfo.getId());
+                    return CourseConverter.toCourseListForAdminResponse(courseInfo, descriptions);
+                }).toList();
     }
 
     private Level validateLevel(String level) {

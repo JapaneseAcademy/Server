@@ -92,4 +92,24 @@ public class CourseConverter {
             throw new CourseMappingException();
         }
     }
+
+    public static CourseListForAdminResponse toCourseListForAdminResponse(
+            CourseInfo courseInfo, List<String> descriptions
+    ) {
+        try {
+            return CourseListForAdminResponse.adminBuilder()
+                    .courseInfoId(courseInfo.getId())
+                    .title(courseInfo.getTitle())
+                    .cost(courseInfo.getCost())
+                    .isLive(courseInfo.getIsLive())
+                    .isOnline(courseInfo.getIsOnline())
+                    .isRecorded(courseInfo.getIsRecorded())
+                    .mainImageUrl(courseInfo.getMainImageUrl())
+                    .descriptions(descriptions)
+                    .level(courseInfo.getLevel())
+                    .build();
+        } catch (Exception e) {
+            throw new CourseMappingException();
+        }
+    }
 }

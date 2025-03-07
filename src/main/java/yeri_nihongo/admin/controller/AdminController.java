@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
+import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
+import yeri_nihongo.course.service.CourseInfoService;
 import yeri_nihongo.course.service.CourseService;
 import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
 import yeri_nihongo.enrollment.service.EnrollmentService;
@@ -29,6 +31,7 @@ public class AdminController {
     private final MemberService memberService;
     private final ReviewService reviewService;
     private final CourseService courseService;
+    private final CourseInfoService courseInfoService;
     private final EnrollmentService enrollmentService;
 
     @PostMapping("/token")
@@ -49,6 +52,13 @@ public class AdminController {
             @RequestParam(value = "page", defaultValue = "0") Integer page
     ) {
         ReviewListForAdminResponse responses = reviewService.getReviewsForAdminByCourseInfoId(courseInfoId, page);
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/courseInfos")
+    public ResponseEntity<List<CourseListForAdminResponse>> getCourseInfosForAdmin() {
+        List<CourseListForAdminResponse> responses = courseInfoService.getAllCourseInfosForAdmin();
 
         return ResponseEntity.ok(responses);
     }
