@@ -7,13 +7,17 @@ import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.config.auth.PrincipalDetailsService;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.enrollment.converter.EnrollmentConverter;
+import yeri_nihongo.enrollment.domain.Category;
 import yeri_nihongo.enrollment.domain.Enrollment;
+import yeri_nihongo.enrollment.dto.request.CreateEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 import yeri_nihongo.enrollment.repository.EnrollmentRepository;
 import yeri_nihongo.exception.course.CourseInfoNotFoundException;
+import yeri_nihongo.exception.enrollment.UnavailableCategoryException;
 import yeri_nihongo.member.domain.Member;
 import yeri_nihongo.time.domain.TimeTable;
+import yeri_nihongo.time.repository.TimeTableRepository;
 
 import java.util.List;
 
@@ -24,6 +28,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final CommonService commonService;
 
     private final EnrollmentRepository enrollmentRepository;
+    private final TimeTableRepository timeTableRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,5 +60,27 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public CourseInfo getCourseInfoByEnrollmentId(Long enrollmentId) {
         return enrollmentRepository.findCourseInfoByEnrollmentId(enrollmentId)
                 .orElseThrow(() -> new CourseInfoNotFoundException("enrollment id: " + enrollmentId));
+    }
+
+    @Override
+    @Transactional
+    public void createEnrollment(CreateEnrollmentRequest request) {
+        Long memberId = PrincipalDetailsService.getCurrentMemberId();
+        Member member = commonService.getMemberByMemberId(memberId);
+        TimeTable timeTable = commonService.getTimeTableByTimeTableId(request.getTimeTableId());
+
+        validateCategory(timeTable, request.getCategory());
+        Enrollment enrollment = EnrollmentConverter.toEntity(member, timeTable, request);
+        enrollmentRepository.save(enrollment);
+    }
+
+    private void validateCategory(TimeTable timeTable, Category category) {
+        CourseInfo courseInfo = timeTableRepository.findCourseInfoByTimeTableId(timeTable.getId());
+
+        if (category.equals(Category.LIVE) && !courseInfo.getIsLive()
+                || category.equals(Category.ONLINE) && !courseInfo.getIsOnline()
+                || category.equals(Category.RECORDED) && !courseInfo.getIsRecorded()) {
+            throw new UnavailableCategoryException(courseInfo.getId());
+        }
     }
 }

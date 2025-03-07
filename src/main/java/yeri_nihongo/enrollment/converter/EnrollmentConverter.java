@@ -2,6 +2,7 @@ package yeri_nihongo.enrollment.converter;
 
 import yeri_nihongo.enrollment.domain.Category;
 import yeri_nihongo.enrollment.domain.Enrollment;
+import yeri_nihongo.enrollment.dto.request.CreateEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 import yeri_nihongo.exception.enrollment.EnrollmentMappingException;
 import yeri_nihongo.member.domain.Member;
@@ -21,6 +22,21 @@ public class EnrollmentConverter {
                 .category(category)
                 .paymentAmount(paymentAmount)
                 .paymentAt(paymentDate.atTime(LocalTime.now()))
+                .build();
+    }
+
+    public static Enrollment toEntity(
+            Member member, TimeTable timeTable, CreateEnrollmentRequest request
+    ) {
+        return Enrollment.builder()
+                .member(member)
+                .timeTable(timeTable)
+                .category(request.getCategory())
+                .paymentAmount(request.getPaymentAmount())
+                .paymentAt(request.getPaymentAt())
+                .paymentKey(request.getPaymentKey())
+                .orderId(request.getOrderId())
+                .method(request.getMethod())
                 .build();
     }
 

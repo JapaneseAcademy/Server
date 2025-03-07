@@ -1,10 +1,11 @@
 package yeri_nihongo.enrollment.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import yeri_nihongo.enrollment.dto.request.CreateEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 import yeri_nihongo.enrollment.service.EnrollmentService;
 
@@ -22,5 +23,14 @@ public class EnrollmentController {
         List<EnrollmentListResponse> responses = enrollmentService.getEnrollmentsForUser();
 
         return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<HttpStatus> createEnrollment(
+            @RequestBody @Valid CreateEnrollmentRequest request
+    ) {
+        enrollmentService.createEnrollment(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
