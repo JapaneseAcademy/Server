@@ -18,7 +18,9 @@ public interface ReviewService {
 
     List<ReviewDetailResponse> getMainReviews();
 
-    ReviewListForAdminResponse getReviewsForAdminByCourseInfoId(Long courseInfoId, Integer page);
+    ReviewListForAdminResponse getAllReviewsForAdmin(Integer page);
+
+    ReviewListForAdminResponse getReviewsByCourseInfoIdForAdmin(Long courseInfoId, Integer page);
 
     void toggleVisibility(Long reviewId);
 

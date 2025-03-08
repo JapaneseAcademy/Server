@@ -33,6 +33,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r " +
             "FROM Review r " +
+            "WHERE r.courseInfo.id = :courseInfoId")
+    Page<Review> getReviewsByCourseInfoIdForAdmin(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
+
+    @Query("SELECT r " +
+            "FROM Review r " +
             "WHERE r.isBest = true and r.courseInfo.id = :courseInfoId")
     Page<Review> getBestReviewByCourseInfoId(@Param("courseInfoId") Long courseInfoId, Pageable pageable);
 
@@ -42,5 +47,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "ORDER BY r.createdAt DESC")
     List<Review> getMainReview();
 
-    List<Review> findAllByOrderByCreatedAtDesc();
+    @Query("SELECT r " +
+            "FROM Review r " +
+            "WHERE r.isVisible = true")
+    Page<Review> findAllVisibleReviews(Pageable pageable);
 }

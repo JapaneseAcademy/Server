@@ -42,6 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public ReviewListResponse getReviewsByCourseInfoId(Long courseInfoId, Integer page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(
+                Sort.Order.desc("isForMain"),
                 Sort.Order.desc("isBest"),
                 Sort.Order.desc("createdAt")
         ));
@@ -74,15 +75,23 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public ReviewListForAdminResponse getReviewsForAdminByCourseInfoId(Long courseInfoId, Integer page) {
+    public ReviewListForAdminResponse getAllReviewsForAdmin(Integer page) {
         Pageable pageable = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Review> reviews;
+        Page<Review> reviews = reviewRepository.findAll(pageable);
 
-        if (courseInfoId == null) {
-            reviews = reviewRepository.findAll(pageable);
-        } else {
-            reviews = reviewRepository.getReviewByCourseInfoId(courseInfoId, pageable);
-        }
+        List<ReviewForAdminResponse> responses = reviews.stream()
+                .map(review -> (ReviewForAdminResponse) getReviewDetailResponse(review, ReviewConverter::toReviewForAdminResponse))
+                .toList();
+
+        PageImpl<ReviewForAdminResponse> reviewResponses = new PageImpl<>(responses, pageable, reviews.getTotalElements());
+        return ReviewConverter.toReviewListForAdminResponse(reviewResponses);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewListForAdminResponse getReviewsByCourseInfoIdForAdmin(Long courseInfoId, Integer page) {
+        Pageable pageable = PageRequest.of(page, 8, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Review> reviews = reviewRepository.getReviewsByCourseInfoIdForAdmin(courseInfoId, pageable);
 
         List<ReviewForAdminResponse> responses = reviews.stream()
                 .map(review -> (ReviewForAdminResponse) getReviewDetailResponse(review, ReviewConverter::toReviewForAdminResponse))
@@ -123,7 +132,7 @@ public class ReviewServiceImpl implements ReviewService {
         ));
 
         return processReview(() ->
-                reviewRepository.findAll(pageable), pageable);
+                reviewRepository.findAllVisibleReviews(pageable), pageable);
     }
 
     @Override

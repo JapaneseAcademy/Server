@@ -50,11 +50,20 @@ public class AdminController {
     }
 
     @GetMapping("/reviews")
-    public ResponseEntity<ReviewListForAdminResponse> getReviewsForAdmin(
-            @RequestParam(value = "courseInfoId", required = false) Long courseInfoId,
+    public ResponseEntity<ReviewListForAdminResponse> getAllReviewsForAdmin(
             @RequestParam(value = "page", defaultValue = "0") Integer page
     ) {
-        ReviewListForAdminResponse responses = reviewService.getReviewsForAdminByCourseInfoId(courseInfoId, page);
+        ReviewListForAdminResponse response = reviewService.getAllReviewsForAdmin(page);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/courses/{courseInfoId}/reviews")
+    public ResponseEntity<ReviewListForAdminResponse> getReviewsForAdmin(
+            @PathVariable Long courseInfoId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page
+    ) {
+        ReviewListForAdminResponse responses = reviewService.getReviewsByCourseInfoIdForAdmin(courseInfoId, page);
 
         return ResponseEntity.ok(responses);
     }
