@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import yeri_nihongo.admin.dto.request.MessageRequest;
+import yeri_nihongo.admin.service.MessageService;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
 import yeri_nihongo.course.service.CourseInfoService;
@@ -33,6 +35,7 @@ public class AdminController {
     private final CourseService courseService;
     private final CourseInfoService courseInfoService;
     private final EnrollmentService enrollmentService;
+    private final MessageService messageService;
 
     @PostMapping("/token")
     public ResponseEntity<?> isInstructor() {
@@ -118,5 +121,14 @@ public class AdminController {
         List<CourseStudentResponse> responses = memberService.getStudentsByTimeTableId(timeTableId);
 
         return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping("/message")
+    public ResponseEntity<HttpStatus> sendMessage(
+            @RequestBody @Valid MessageRequest request
+    ) {
+        messageService.sendMessage(request);
+
+        return ResponseEntity.ok().build();
     }
 }
