@@ -3,7 +3,7 @@ package yeri_nihongo.config.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import yeri_nihongo.auth.dto.AuthToken;
-import yeri_nihongo.auth.service.RefreshTokenService;
+import yeri_nihongo.common.service.RedisService;
 import yeri_nihongo.config.jwt.JwtProvider;
 import yeri_nihongo.member.domain.Role;
 
@@ -20,7 +20,7 @@ public class AuthTokenGenerator {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;
 
     private final JwtProvider jwtProvider;
-    private final RefreshTokenService refreshTokenService;
+    private final RedisService redisService;
 
     public AuthToken generate(String loginId, Role role) {
         long now = (new Date()).getTime();
@@ -29,7 +29,7 @@ public class AuthTokenGenerator {
 
         String accessToken = jwtProvider.accessTokenGenerate(loginId, role, accessTokenExpiredAt);
         String refreshToken = jwtProvider.refreshTokenGenerate(refreshTokenExpiredAt);
-        refreshTokenService.saveRefreshToken(loginId, role, refreshToken, REFRESH_TOKEN_EXPIRE_TIME);
+        redisService.saveRefreshToken(loginId, role, refreshToken, REFRESH_TOKEN_EXPIRE_TIME);
 
         return AuthToken.of(BEARER_TYPE, accessToken, refreshToken);
     }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.auth.dto.AuthToken;
 import yeri_nihongo.auth.dto.request.RefreshTokenRequest;
 import yeri_nihongo.auth.dto.response.RefreshTokenResponse;
+import yeri_nihongo.common.service.RedisService;
 import yeri_nihongo.config.auth.AuthTokenGenerator;
 import yeri_nihongo.config.auth.PrincipalDetailsService;
 import yeri_nihongo.config.jwt.JwtProvider;
@@ -17,7 +18,7 @@ import yeri_nihongo.member.domain.Role;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
 
-    private final RefreshTokenService refreshTokenService;
+    private final RedisService redisService;
 
     private final JwtProvider jwtProvider;
     private final AuthTokenGenerator authTokenGenerator;
@@ -43,7 +44,7 @@ public class AuthServiceImpl implements AuthService{
             throw new InvalidRefreshTokenException();
         }
 
-        String storedToken = refreshTokenService.getRefreshToken(loginId);
+        String storedToken = redisService.getRefreshToken(loginId);
         if (storedToken == null || !refreshToken.equals(storedToken.split(":")[1])) {
             throw new InvalidRefreshTokenException();
         }
@@ -64,6 +65,6 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void logout() {
         String loginId = PrincipalDetailsService.getCurrentLoginId();
-        refreshTokenService.deleteRefreshToken(loginId);
+        redisService.deleteRefreshToken(loginId);
     }
 }
