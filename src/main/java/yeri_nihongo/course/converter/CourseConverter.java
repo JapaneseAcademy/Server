@@ -68,13 +68,15 @@ public class CourseConverter {
     }
 
     public static CourseForAdminResponse toCourseForAdminResponse(
-            Course course, TimeTableResponse timeTable, int studentCount, String title
+            Course course, TimeTableResponse timeTable, int studentCount, String title, int baseCost
     ) {
         try {
             return CourseForAdminResponse.builder()
                     .courseId(course.getId())
                     .startDate(course.getStartDate())
                     .endDate(course.getEndDate())
+                    .baseCost(baseCost)
+                    .saleCost(course.getCost())
                     .title(title)
                     .studentCount(studentCount)
                     .timeTable(timeTable)

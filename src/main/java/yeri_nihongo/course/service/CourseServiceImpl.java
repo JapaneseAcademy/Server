@@ -35,7 +35,9 @@ public class CourseServiceImpl implements CourseService {
                     return timeTableResponses.stream()
                             .map(timeTableResponse ->{
                                 int studentCount = timeTableService.getStudentCountByTimeTableId(timeTableResponse.getTimeTableId());
-                                return CourseConverter.toCourseForAdminResponse(course, timeTableResponse, studentCount, title);
+                                Integer baseCost = courseRepository.findBaseCostByCourseId(course.getId())
+                                        .orElse(0);
+                                return CourseConverter.toCourseForAdminResponse(course, timeTableResponse, studentCount, title, baseCost);
                                     });
                 })
                 .toList();
