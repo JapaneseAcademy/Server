@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import yeri_nihongo.payment.dto.request.TossPaymentConfirmRequest;
+import yeri_nihongo.payment.dto.response.OrderIdResponse;
 import yeri_nihongo.payment.dto.response.TossPaymentConfirmResponse;
 
 import java.util.Base64;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,11 @@ public class TossServiceImpl implements TossService {
                 .retrieve()
                 .bodyToMono(TossPaymentConfirmResponse.class)
                 .block();
+    }
+
+    @Override
+    public OrderIdResponse generateOrderId() {
+        return new OrderIdResponse("YERI-JP-ORDER-TOSS-" + UUID.randomUUID().toString());
     }
 
     private Map<String, Object> buildRequestBody(String paymentKey, TossPaymentConfirmRequest request) {
