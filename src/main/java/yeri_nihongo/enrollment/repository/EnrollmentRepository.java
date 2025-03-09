@@ -15,7 +15,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     @Query("SELECT e " +
             "FROM Enrollment e " +
-            "WHERE e.member.id = :memberId")
+            "WHERE e.member.id = :memberId " +
+            "ORDER BY e.createdAt DESC")
     List<Enrollment> findEnrollmentByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT ci " +
@@ -25,4 +26,10 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
             "JOIN c.courseInfo ci " +
             "WHERE e.id = :enrollmentId")
     Optional<CourseInfo> findCourseInfoByEnrollmentId(@Param("enrollmentId") Long enrollmentId);
+
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Enrollment e " +
+            "JOIN Review r ON e.id = r.enrollment.id " +
+            "WHERE e.id = :enrollmentId")
+    boolean existsReviewByEnrollmentId(@Param("enrollmentId") Long enrollmentId);
 }

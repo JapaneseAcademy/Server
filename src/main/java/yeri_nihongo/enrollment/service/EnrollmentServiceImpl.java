@@ -32,13 +32,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EnrollmentListResponse> getEnrollmentsForUser() {
+    public List<EnrollmentListResponse> getEnrollments() {
         Long memberId = PrincipalDetailsService.getCurrentMemberId();
         List<Enrollment> enrollments = enrollmentRepository.findEnrollmentByMemberId(memberId);
         List<EnrollmentListResponse> responses = enrollments.stream()
                 .map(enrollment -> {
                     CourseInfo courseInfo = getCourseInfoByEnrollmentId(enrollment.getId());
-                    return EnrollmentConverter.toEnrollmentListResponse(enrollment, courseInfo.getTitle(), courseInfo.getMainImageUrl());
+                    boolean isReviewed = enrollmentRepository.existsReviewByEnrollmentId(enrollment.getId());
+                    return EnrollmentConverter.toEnrollmentListResponse(enrollment, courseInfo, isReviewed);
                 }).toList();
 
         return responses;

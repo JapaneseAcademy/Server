@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface EnrollmentService {
 
-    List<EnrollmentListResponse> getEnrollmentsForUser();
+    List<EnrollmentListResponse> getEnrollments();
 
     void createEnrollmentByAdmin(CustomEnrollmentRequest request);
 

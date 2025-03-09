@@ -19,8 +19,8 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     @GetMapping("")
-    public ResponseEntity<List<EnrollmentListResponse>> getEnrollmentsForUser() {
-        List<EnrollmentListResponse> responses = enrollmentService.getEnrollmentsForUser();
+    public ResponseEntity<List<EnrollmentListResponse>> getEnrollments() {
+        List<EnrollmentListResponse> responses = enrollmentService.getEnrollments();
 
         return ResponseEntity.ok(responses);
     }
