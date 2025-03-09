@@ -7,6 +7,7 @@ import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
+import yeri_nihongo.course.repository.CourseInfoRepository;
 import yeri_nihongo.course.repository.CourseRepository;
 import yeri_nihongo.exception.course.NoScheduledCourseException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
@@ -21,6 +22,7 @@ public class CourseServiceImpl implements CourseService {
     private final TimeTableService timeTableService;
 
     private final CourseRepository courseRepository;
+    private final CourseInfoRepository courseInfoRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -47,7 +49,14 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseRepository.findCurrentCourseByCourseInfoId(courseInfoId)
                 .orElseThrow(() -> new NoScheduledCourseException(courseInfoId));
         List<TimeTableResponse> timeTableResponses = timeTableService.getTimeTablesByCourseId(course.getId());
+        int baseCost = courseInfoRepository.findCostByCourseInfoId(courseInfoId);
 
-        return CourseConverter.toCourseResponse(course, timeTableResponses);
+        return CourseConverter.toCourseResponse(course, timeTableResponses, baseCost);
+    }
+
+    @Override
+    public Integer findSaleCostByCourseInfoId(Long courseInfoId) {
+        return courseRepository.findSaleCostByCourseInfoId(courseInfoId)
+                .orElse(null);
     }
 }

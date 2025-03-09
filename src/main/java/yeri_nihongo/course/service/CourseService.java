@@ -10,4 +10,6 @@ public interface CourseService {
     List<CourseForAdminResponse> getCoursesForAdmin(String date);
 
     CourseResponse getCurrentCourseByCourseInfoId(Long courseInfoId);
+
+    Integer findSaleCostByCourseInfoId(Long courseInfoId);
 }

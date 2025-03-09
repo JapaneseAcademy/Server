@@ -21,4 +21,9 @@ public interface CourseInfoRepository extends JpaRepository<CourseInfo, Long> {
             "FROM CourseInfo ci " +
             "ORDER BY ci.level ASC")
     List<CourseInfo> findAll();
+
+    @Query("SELECT ci.cost " +
+            "FROM CourseInfo ci " +
+            "WHERE ci.id = :courseInfoId")
+    int findCostByCourseInfoId(@Param("courseInfoId") Long courseInfoId);
 }

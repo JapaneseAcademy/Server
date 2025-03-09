@@ -38,8 +38,13 @@ public class CourseInfoServiceImpl implements CourseInfoService {
     @Transactional(readOnly = true)
     public List<CourseListResponse> getAllCourseInfos() {
         List<CourseInfo> courseInfos = courseInfoRepository.findAll();
+
         return courseInfos.stream()
-                .map(CourseConverter::toCourseListResponse)
+                .filter(courseInfo -> courseService.findSaleCostByCourseInfoId(courseInfo.getId()) != null)
+                .map(courseInfo -> {
+                    int saleCost = courseService.findSaleCostByCourseInfoId(courseInfo.getId());
+                    return CourseConverter.toCourseListResponse(courseInfo, saleCost);
+                })
                 .toList();
     }
 
