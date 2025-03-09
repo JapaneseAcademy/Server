@@ -96,15 +96,14 @@ public class CourseConverter {
     }
 
     public static CourseListForAdminResponse toCourseListForAdminResponse(
-            CourseInfo courseInfo, List<String> descriptions
+            CourseInfo courseInfo, List<String> descriptions, Integer saleCost
     ) {
         try {
             return CourseListForAdminResponse.adminBuilder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
                     .baseCost(courseInfo.getCost())
-                    // TODO: saleCost 값
-                    .saleCost(99)
+                    .saleCost(saleCost)
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
