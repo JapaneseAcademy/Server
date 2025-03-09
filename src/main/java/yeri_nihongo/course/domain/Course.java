@@ -31,6 +31,9 @@ public class Course {
     @Column(nullable = false)
     private LocalDate endDate;
 
+    @Column(nullable = false)
+    private int cost;
+
     @Builder
     public Course(CourseInfo courseInfo, LocalDate startDate, LocalDate endDate) {
         this.courseInfo = courseInfo;
