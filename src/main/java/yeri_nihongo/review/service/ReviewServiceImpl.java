@@ -145,7 +145,9 @@ public class ReviewServiceImpl implements ReviewService {
         Review entity = ReviewConverter.toEntity(request, courseInfo, enrollment);
 
         Review review = reviewRepository.save(entity);
-        reviewImageService.createReviewImages(review, images);
+        if (images != null && !images.isEmpty()) {
+            reviewImageService.createReviewImages(review, images);
+        }
     }
 
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
