@@ -10,4 +10,6 @@ public interface CourseCustomRepository {
     List<Course> searchWithFilter(String date);
 
     Optional<Course> findCurrentCourseByCourseInfoId(Long courseInfoId);
+
+    Optional<Integer> findSaleCostByCourseInfoId(Long courseInfoId);
 }
