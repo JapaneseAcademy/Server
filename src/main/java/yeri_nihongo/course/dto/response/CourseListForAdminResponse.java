@@ -15,7 +15,8 @@ public class CourseListForAdminResponse extends CourseListResponse{
     CourseListForAdminResponse(
             Long courseInfoId,
             String title,
-            int cost,
+            int baseCost,
+            int saleCost,
             String mainImageUrl,
             boolean isLive,
             boolean isOnline,
@@ -23,7 +24,7 @@ public class CourseListForAdminResponse extends CourseListResponse{
             Level level,
             List<String> descriptions
     ) {
-        super(courseInfoId, title, cost, mainImageUrl, isLive, isOnline, isRecorded, level);
+        super(courseInfoId, title, baseCost, saleCost, mainImageUrl, isLive, isOnline, isRecorded, level);
         this.descriptions = descriptions;
     }
 }

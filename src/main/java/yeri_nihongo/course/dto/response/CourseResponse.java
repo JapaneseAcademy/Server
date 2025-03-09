@@ -13,8 +13,14 @@ public class CourseResponse extends CourseBaseResponse {
     private List<TimeTableResponse> timeTables;
 
     @Builder
-    public CourseResponse(Long courseId, LocalDate startDate, LocalDate endDate, List<TimeTableResponse> timeTables) {
-        super(courseId, startDate, endDate);
+    public CourseResponse(
+            Long courseId,
+            LocalDate startDate,
+            LocalDate endDate,
+            int baseCost,
+            int saleCost,
+            List<TimeTableResponse> timeTables) {
+        super(courseId, startDate, endDate, baseCost, saleCost);
         this.timeTables = timeTables;
     }
 }

@@ -10,7 +10,8 @@ public class CourseListResponse {
 
     private Long courseInfoId;
     private String title;
-    private int cost;
+    private int baseCost;
+    private int saleCost;
     private String mainImageUrl;
     private boolean isLive;
     private boolean isOnline;

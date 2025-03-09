@@ -17,7 +17,6 @@ public class CourseConverter {
             return CourseInfoResponse.builder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
-                    .cost(courseInfo.getCost())
                     .mainImageUrl(courseInfo.getMainImageUrl())
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
@@ -32,13 +31,15 @@ public class CourseConverter {
     }
 
     public static CourseResponse toCourseResponse(
-            Course course, List<TimeTableResponse> timeTables
+            Course course, List<TimeTableResponse> timeTables, int baseCost
     ) {
         try {
             return CourseResponse.builder()
                     .courseId(course.getId())
                     .startDate(course.getStartDate())
                     .endDate(course.getEndDate())
+                    .baseCost(baseCost)
+                    .saleCost(course.getCost())
                     .timeTables(timeTables)
                     .build();
         } catch (Exception e) {
@@ -47,13 +48,14 @@ public class CourseConverter {
     }
 
     public static CourseListResponse toCourseListResponse(
-            CourseInfo courseInfo
+            CourseInfo courseInfo, int saleCost
     ) {
         try {
             return CourseListResponse.builder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
-                    .cost(courseInfo.getCost())
+                    .baseCost(courseInfo.getCost())
+                    .saleCost(saleCost)
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
@@ -100,7 +102,9 @@ public class CourseConverter {
             return CourseListForAdminResponse.adminBuilder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
-                    .cost(courseInfo.getCost())
+                    .baseCost(courseInfo.getCost())
+                    // TODO: saleCost 값
+                    .saleCost(99)
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())

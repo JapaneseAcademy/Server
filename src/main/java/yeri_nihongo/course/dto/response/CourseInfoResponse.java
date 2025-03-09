@@ -12,7 +12,6 @@ public class CourseInfoResponse {
 
     private Long courseInfoId;
     private String title;
-    private int cost;
     private String mainImageUrl;
     private List<String> descriptions;
     private boolean isLive;

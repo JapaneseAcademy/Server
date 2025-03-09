@@ -12,4 +12,6 @@ public class CourseBaseResponse {
     private Long courseId;
     private LocalDate startDate;
     private LocalDate endDate;
+    private int baseCost;
+    private int saleCost;
 }
