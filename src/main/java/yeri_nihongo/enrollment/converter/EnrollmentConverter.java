@@ -1,5 +1,6 @@
 package yeri_nihongo.enrollment.converter;
 
+import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.enrollment.domain.Category;
 import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.enrollment.dto.request.CreateEnrollmentRequest;
@@ -41,16 +42,18 @@ public class EnrollmentConverter {
     }
 
     public static EnrollmentListResponse toEnrollmentListResponse(
-            Enrollment enrollment, String title, String mainImageUrl
+            Enrollment enrollment, CourseInfo courseInfo, boolean isReviewed
     ) {
         try {
             return EnrollmentListResponse.builder()
                     .enrollmentId(enrollment.getId())
-                    .title(title)
-                    .mainImageUrl(mainImageUrl)
+                    .courseInfoId(courseInfo.getId())
+                    .title(courseInfo.getTitle())
+                    .mainImageUrl(courseInfo.getMainImageUrl())
                     .paymentAmount(enrollment.getPaymentAmount())
                     .paymentDate(enrollment.getPaymentAt().toLocalDate())
                     .category(enrollment.getCategory())
+                    .isReviewed(isReviewed)
                     .build();
         } catch (Exception e) {
             throw new EnrollmentMappingException();
