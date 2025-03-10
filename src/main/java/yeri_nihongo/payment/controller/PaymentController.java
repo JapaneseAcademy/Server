@@ -1,12 +1,12 @@
 package yeri_nihongo.payment.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import yeri_nihongo.payment.dto.request.TossPaymentConfirmRequest;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import yeri_nihongo.payment.dto.response.OrderIdResponse;
-import yeri_nihongo.payment.dto.response.TossPaymentConfirmResponse;
 import yeri_nihongo.payment.service.TossService;
 
 @RestController
@@ -21,17 +21,6 @@ public class PaymentController {
             @RequestParam("timeTableId") Long timeTableId
     ) {
         OrderIdResponse response = tossService.generateOrderId(timeTableId);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/toss/{paymentKey}")
-
-    public ResponseEntity<TossPaymentConfirmResponse> confirmTossPayment(
-            @PathVariable("paymentKey") String paymentKey,
-            @RequestBody @Valid TossPaymentConfirmRequest request
-    ) {
-        TossPaymentConfirmResponse response = tossService.confirmPayment(paymentKey, request);
 
         return ResponseEntity.ok(response);
     }
