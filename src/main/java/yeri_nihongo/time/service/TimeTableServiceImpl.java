@@ -47,4 +47,9 @@ public class TimeTableServiceImpl implements TimeTableService {
     public List<Enrollment> getEnrollmentsByTimeTableId(Long timeTableId) {
         return timeTableRepository.findEnrollmentsByTimeTableId(timeTableId);
     }
+
+    @Override
+    public int getSaleCostByTimeTableId(Long timeTableId) {
+        return timeTableRepository.findSaleCostByTimeTableId(timeTableId);
+    }
 }

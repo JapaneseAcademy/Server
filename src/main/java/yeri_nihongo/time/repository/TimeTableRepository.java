@@ -37,4 +37,10 @@ public interface TimeTableRepository extends JpaRepository<TimeTable, Long> {
             "WHERE tt.id = :timeTableId " +
             "ORDER BY m.name ASC")
     List<Enrollment> findEnrollmentsByTimeTableId(@Param("timeTableId") Long timeTableId);
+
+    @Query("SELECT c.cost " +
+            "FROM TimeTable tt " +
+            "JOIN Course c ON tt.course.id = c.id " +
+            "WHERE tt.id = :timeTableId")
+    int findSaleCostByTimeTableId(@Param("timeTableId") Long timeTableId);
 }

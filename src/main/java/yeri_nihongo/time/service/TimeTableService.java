@@ -12,4 +12,6 @@ public interface TimeTableService {
     int getStudentCountByTimeTableId(Long timeTableId);
 
     List<Enrollment> getEnrollmentsByTimeTableId(Long timeTableId);
+
+    int getSaleCostByTimeTableId(Long timeTableId);
 }
