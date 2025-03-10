@@ -3,10 +3,10 @@ package yeri_nihongo.enrollment.converter;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.enrollment.domain.Category;
 import yeri_nihongo.enrollment.domain.Enrollment;
-import yeri_nihongo.enrollment.dto.request.CreateEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 import yeri_nihongo.exception.enrollment.EnrollmentMappingException;
 import yeri_nihongo.member.domain.Member;
+import yeri_nihongo.payment.dto.response.TossPaymentConfirmResponse;
 import yeri_nihongo.time.domain.TimeTable;
 
 import java.time.LocalDate;
@@ -27,17 +27,17 @@ public class EnrollmentConverter {
     }
 
     public static Enrollment toEntity(
-            Member member, TimeTable timeTable, CreateEnrollmentRequest request
+            Member member, TimeTable timeTable, Category category, TossPaymentConfirmResponse tossPaymentConfirmResponse
     ) {
         return Enrollment.builder()
                 .member(member)
                 .timeTable(timeTable)
-                .category(request.getCategory())
-                .paymentAmount(request.getPaymentAmount())
-                .paymentAt(request.getPaymentAt())
-                .paymentKey(request.getPaymentKey())
-                .orderId(request.getOrderId())
-                .method(request.getMethod())
+                .category(category)
+                .paymentAt(tossPaymentConfirmResponse.getPaymentAt())
+                .paymentAmount(tossPaymentConfirmResponse.getPaymentAmount())
+                .paymentKey(tossPaymentConfirmResponse.getPaymentKey())
+                .orderId(tossPaymentConfirmResponse.getOrderId())
+                .method(tossPaymentConfirmResponse.getMethod())
                 .build();
     }
 
