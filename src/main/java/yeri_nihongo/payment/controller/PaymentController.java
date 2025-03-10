@@ -17,8 +17,10 @@ public class PaymentController {
     private final TossService tossService;
 
     @GetMapping("/toss")
-    public ResponseEntity<OrderIdResponse> getOrderId() {
-        OrderIdResponse response = tossService.generateOrderId();
+    public ResponseEntity<OrderIdResponse> getOrderId(
+            @RequestParam("timeTableId") Long timeTableId
+    ) {
+        OrderIdResponse response = tossService.generateOrderId(timeTableId);
 
         return ResponseEntity.ok(response);
     }

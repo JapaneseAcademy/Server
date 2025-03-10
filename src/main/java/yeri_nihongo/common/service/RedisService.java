@@ -15,6 +15,9 @@ public class RedisService {
 
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;
+    
+    // 결제 승인 제한 시간 10분
+    private static final long ORDER_EXPIRE_TIME = 1000 * 60 * 10;
     private static final String YOUTUBE_KEY = "YoutubeUrl";
 
     public void saveYoutubeUrl(String youtubeUrl) {
@@ -42,5 +45,15 @@ public class RedisService {
     // Refresh Token 삭제
     public void deleteRefreshToken(String id) {
         redisTemplate.delete(getRefreshTokenKey(id));
+    }
+
+    public void saveOrderIdAndAmount(String orderId, int amount) {
+        redisTemplate.opsForValue().set(orderId, String.valueOf(amount), ORDER_EXPIRE_TIME);
+    }
+
+    public int getAmount(String orderId) {
+        String amount = redisTemplate.opsForValue().get(orderId);
+
+        return Integer.parseInt(amount);
     }
 }

@@ -8,5 +8,5 @@ public interface TossService {
 
     TossPaymentConfirmResponse confirmPayment(String paymentKey, TossPaymentConfirmRequest request);
 
-    OrderIdResponse generateOrderId();
+    OrderIdResponse generateOrderId(Long timeTableId);
 }
