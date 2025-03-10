@@ -35,9 +35,10 @@ public class Course {
     private int cost;
 
     @Builder
-    public Course(CourseInfo courseInfo, LocalDate startDate, LocalDate endDate) {
+    public Course(CourseInfo courseInfo, LocalDate startDate, LocalDate endDate, int cost) {
         this.courseInfo = courseInfo;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.cost = cost;
     }
 }
