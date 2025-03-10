@@ -92,6 +92,13 @@ public class MemberServiceImpl implements MemberService{
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public String getPhoneByMemberId(Long memberId) {
+        return memberRepository.findPhoneByMemberId(memberId)
+                .orElseThrow(() -> new UserNotFoundException(memberId));
+    }
+
     private void validateMemberDoesNotExist(String loginId) {
         if (memberRepository.findByLoginId(loginId).isPresent()) {
             throw new UserAlreadyExistsException(loginId);

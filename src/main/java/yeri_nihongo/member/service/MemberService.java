@@ -20,4 +20,6 @@ public interface MemberService {
     void updateMember(MemberUpdateRequest request);
 
     List<CourseStudentResponse> getStudentsByTimeTableId(Long timeTableId);
+
+    String getPhoneByMemberId(Long memberId);
 }
