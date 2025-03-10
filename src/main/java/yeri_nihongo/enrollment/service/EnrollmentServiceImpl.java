@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.common.service.CommonService;
+import yeri_nihongo.common.service.RedisService;
 import yeri_nihongo.config.auth.PrincipalDetailsService;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.enrollment.converter.EnrollmentConverter;
@@ -14,8 +15,11 @@ import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
 import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 import yeri_nihongo.enrollment.repository.EnrollmentRepository;
 import yeri_nihongo.exception.course.CourseInfoNotFoundException;
+import yeri_nihongo.exception.enrollment.AmountMismatchException;
 import yeri_nihongo.exception.enrollment.UnavailableCategoryException;
 import yeri_nihongo.member.domain.Member;
+import yeri_nihongo.payment.dto.response.TossPaymentConfirmResponse;
+import yeri_nihongo.payment.service.TossService;
 import yeri_nihongo.time.domain.TimeTable;
 import yeri_nihongo.time.repository.TimeTableRepository;
 
@@ -26,6 +30,8 @@ import java.util.List;
 public class EnrollmentServiceImpl implements EnrollmentService {
 
     private final CommonService commonService;
+    private final RedisService redisService;
+    private final TossService tossService;
 
     private final EnrollmentRepository enrollmentRepository;
     private final TimeTableRepository timeTableRepository;
@@ -66,12 +72,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     @Transactional
     public void createEnrollment(CreateEnrollmentRequest request) {
+        validateOrderIdAndAmount(request.getOrderId(), request.getAmount());
+
+        TimeTable timeTable = commonService.getTimeTableByTimeTableId(request.getTimeTableId());
+        validateCategory(timeTable, request.getCategory());
+
         Long memberId = PrincipalDetailsService.getCurrentMemberId();
         Member member = commonService.getMemberByMemberId(memberId);
-        TimeTable timeTable = commonService.getTimeTableByTimeTableId(request.getTimeTableId());
 
-        validateCategory(timeTable, request.getCategory());
-        Enrollment enrollment = EnrollmentConverter.toEntity(member, timeTable, request);
+        TossPaymentConfirmResponse confirmResponse = tossService.confirmPayment(request.getPaymentKey(), request.getOrderId(), request.getAmount());
+
+        Enrollment enrollment = EnrollmentConverter.toEntity(member, timeTable, request.getCategory(), confirmResponse);
         enrollmentRepository.save(enrollment);
     }
 
@@ -82,6 +93,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 || category.equals(Category.ONLINE) && !courseInfo.getIsOnline()
                 || category.equals(Category.RECORDED) && !courseInfo.getIsRecorded()) {
             throw new UnavailableCategoryException(courseInfo.getId());
+        }
+    }
+
+    private void validateOrderIdAndAmount(String orderId, int amount) {
+        int savedAmount = redisService.getAmount(orderId);
+
+        if (amount != savedAmount) {
+            throw new AmountMismatchException();
         }
     }
 }
