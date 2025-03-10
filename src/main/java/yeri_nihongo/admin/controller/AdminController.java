@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import yeri_nihongo.admin.dto.request.MessageRequest;
+import yeri_nihongo.admin.dto.response.MessageResponse;
 import yeri_nihongo.admin.service.MessageService;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
@@ -133,11 +134,11 @@ public class AdminController {
     }
 
     @PostMapping("/message")
-    public ResponseEntity<HttpStatus> sendMessage(
+    public ResponseEntity<MessageResponse> sendMessage(
             @RequestBody @Valid MessageRequest request
     ) {
-        messageService.sendMessage(request);
+        MessageResponse response = messageService.sendMessage(request);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(response);
     }
 }
