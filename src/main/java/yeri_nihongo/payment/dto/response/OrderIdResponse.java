@@ -7,5 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderIdResponse {
 
+    private Long timeTableId;
     private String orderId;
+    private int amount;
 }
