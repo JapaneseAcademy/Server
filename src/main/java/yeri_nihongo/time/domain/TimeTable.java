@@ -30,4 +30,8 @@ public class TimeTable {
     public TimeTable(Course course) {
         this.course = course;
     }
+
+    public void addStudentCount() {
+        this.studentCount++;
+    }
 }
