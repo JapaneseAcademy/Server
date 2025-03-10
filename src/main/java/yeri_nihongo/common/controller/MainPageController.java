@@ -18,16 +18,16 @@ public class MainPageController {
 
     @GetMapping("/youtube")
     public ResponseEntity<YoutubeDto> getYoutubeUrl() {
-        String youtubeUrl = redisService.getYoutubeUrl();
+        String youtubeId = redisService.getYoutubeUrl();
 
-        return ResponseEntity.ok(new YoutubeDto(youtubeUrl));
+        return ResponseEntity.ok(new YoutubeDto(youtubeId));
     }
 
     @PutMapping("/youtube")
     public ResponseEntity<HttpStatus> saveYoutubeUrl(
             @RequestBody @Valid YoutubeDto youtubeDto
     ) {
-        redisService.saveYoutubeUrl(youtubeDto.getYoutubeUrl());
+        redisService.saveYoutubeUrl(youtubeDto.getYoutubeId());
 
         return ResponseEntity.ok().build();
     }
@@ -35,6 +35,6 @@ public class MainPageController {
     @Getter
     @AllArgsConstructor
     public static class YoutubeDto {
-        private String youtubeUrl;
+        private String youtubeId;
     }
 }
