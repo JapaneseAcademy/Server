@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 @Getter
 public class TossPaymentConfirmResponse {
 
+    private String failure;
     private String paymentKey;
     private String orderId;
     private LocalDateTime paymentAt;
@@ -16,10 +17,11 @@ public class TossPaymentConfirmResponse {
     private String method;
 
     @Builder
-    public TossPaymentConfirmResponse(String paymentKey, String orderId, String approvedAt, int totalAmount, String method) {
+    public TossPaymentConfirmResponse(String failure, String paymentKey, String orderId, String approvedAt, int totalAmount, String method) {
+        this.failure = failure;
         this.paymentKey = paymentKey;
         this.orderId = orderId;
-        this.paymentAt = OffsetDateTime.parse(approvedAt).toLocalDateTime();
+        this.paymentAt = approvedAt != null? OffsetDateTime.parse(approvedAt).toLocalDateTime() : null;
         this.paymentAmount = totalAmount;
         this.method = method;
     }
