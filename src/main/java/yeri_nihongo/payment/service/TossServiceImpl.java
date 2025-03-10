@@ -3,12 +3,15 @@ package yeri_nihongo.payment.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import yeri_nihongo.common.service.RedisService;
-import yeri_nihongo.payment.dto.request.TossPaymentConfirmRequest;
+import yeri_nihongo.exception.enrollment.TossConfirmFailedException;
 import yeri_nihongo.payment.dto.response.OrderIdResponse;
+import yeri_nihongo.payment.dto.response.TossConfirmFailResponse;
 import yeri_nihongo.payment.dto.response.TossPaymentConfirmResponse;
 import yeri_nihongo.time.service.TimeTableService;
 
@@ -32,7 +35,7 @@ public class TossServiceImpl implements TossService {
     private final RedisService redisService;
 
     @Override
-    public TossPaymentConfirmResponse confirmPayment(String paymentKey, TossPaymentConfirmRequest request) {
+    public TossPaymentConfirmResponse confirmPayment(String paymentKey, String orderId, int amount) {
         WebClient webClient = WebClient.builder().build();
         String encodedSecretKey = Base64.getEncoder().encodeToString((tossSecretKey + ":").getBytes());
 
@@ -40,8 +43,14 @@ public class TossServiceImpl implements TossService {
                 .uri(TOSS_BASE_URL + "/v1/payments/confirm")
                 .header("Authorization", "Basic " + encodedSecretKey)
                 .header("Content-Type", "application/json")
-                .bodyValue(buildRequestBody(paymentKey, request))
+                .bodyValue(buildRequestBody(paymentKey, orderId, amount))
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, response -> response.bodyToMono(TossConfirmFailResponse.class)
+                        .flatMap(failResponse -> {
+                            log.info(failResponse.getCode());
+                            log.info(failResponse.getMessage());
+                            return Mono.error(new TossConfirmFailedException(failResponse.getMessage(), failResponse.getCode()));
+                        }))
                 .bodyToMono(TossPaymentConfirmResponse.class)
                 .block();
     }
@@ -57,11 +66,11 @@ public class TossServiceImpl implements TossService {
         return new OrderIdResponse(timeTableId, orderId, amount);
     }
 
-    private Map<String, Object> buildRequestBody(String paymentKey, TossPaymentConfirmRequest request) {
+    private Map<String, Object> buildRequestBody(String paymentKey, String orderId, int amount) {
         return Map.of(
                 "paymentKey", paymentKey,
-                "orderId", request.getOrderId(),
-                "amount", request.getAmount()
+                "orderId", orderId,
+                "amount", amount
         );
     }
 }
