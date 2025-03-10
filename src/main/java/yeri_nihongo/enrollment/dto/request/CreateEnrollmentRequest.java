@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import yeri_nihongo.enrollment.domain.Category;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 public class CreateEnrollmentRequest {
@@ -19,17 +17,11 @@ public class CreateEnrollmentRequest {
     private Category category;
 
     @NotNull(message = "결제 금액은 필수 입력 정보입니다.")
-    private int paymentAmount;
-
-    @NotNull(message = "결제일은 필수 입력 정보입니다.")
-    private LocalDateTime paymentAt;
+    private int amount;
 
     @NotBlank(message = "paymentKey는 필수 입력 정보입니다.")
     private String paymentKey;
 
     @NotBlank(message = "orderId는 필수 입력 정보입니다.")
     private String orderId;
-
-    @NotBlank(message = "결제 수단은 필수 입력 정보입니다.")
-    private String method;
 }
