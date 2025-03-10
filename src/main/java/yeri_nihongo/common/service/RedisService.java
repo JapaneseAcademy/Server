@@ -3,6 +3,7 @@ package yeri_nihongo.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import yeri_nihongo.exception.enrollment.InvalidOrderIdException;
 import yeri_nihongo.member.domain.Role;
 
 import java.time.Duration;
@@ -12,13 +13,10 @@ import java.time.Duration;
 public class RedisService {
 
     private final StringRedisTemplate redisTemplate;
-
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 14;
     
     // 결제 승인 제한 시간 10분
     private static final long ORDER_EXPIRE_TIME = 1000 * 60 * 10;
-    private static final String YOUTUBE_KEY = "YoutubeUrl";
+    private static final String YOUTUBE_KEY = "YoutubeId";
 
     public void saveYoutubeUrl(String youtubeUrl) {
         redisTemplate.opsForValue().set(YOUTUBE_KEY, youtubeUrl);
@@ -48,11 +46,15 @@ public class RedisService {
     }
 
     public void saveOrderIdAndAmount(String orderId, int amount) {
-        redisTemplate.opsForValue().set(orderId, String.valueOf(amount), ORDER_EXPIRE_TIME);
+        redisTemplate.opsForValue().set(orderId, String.valueOf(amount), Duration.ofMillis(ORDER_EXPIRE_TIME));
     }
 
     public int getAmount(String orderId) {
         String amount = redisTemplate.opsForValue().get(orderId);
+
+        if (amount == null) {
+            throw new InvalidOrderIdException(orderId);
+        }
 
         return Integer.parseInt(amount);
     }
