@@ -14,8 +14,6 @@ public interface ReviewService {
 
     ReviewListResponse getReviewsByCourseInfoId(Long courseInfoId, Integer page);
 
-    ReviewListResponse getBestReviewsByCourseInfoId(Long courseInfoId, Integer page);
-
     List<ReviewDetailResponse> getMainReviews();
 
     ReviewListForAdminResponse getAllReviewsForAdmin(Integer page);
