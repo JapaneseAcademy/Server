@@ -16,4 +16,5 @@ public class ReviewResponse {
     private List<String> imageUrls;
     private String writer;
     private LocalDate createdDate;
+    private boolean isBest;
 }

@@ -10,7 +10,6 @@ import java.util.List;
 public class ReviewForAdminResponse extends ReviewDetailResponse{
 
     private boolean isForMain;
-    private boolean isBest;
     private boolean isVisible;
 
     @Builder(builderMethodName = "adminBuilder")
@@ -23,13 +22,12 @@ public class ReviewForAdminResponse extends ReviewDetailResponse{
             LocalDate createdDate,
             Long courseInfoId,
             String courseTitle,
-            boolean isForMain,
             boolean isBest,
+            boolean isForMain,
             boolean isVisible
     ) {
-        super(reviewId, reviewTitle, review, imageUrls, writer, createdDate, courseInfoId, courseTitle);
+        super(reviewId, reviewTitle, review, imageUrls, writer, createdDate, courseInfoId, courseTitle, isBest);
         this.isForMain = isForMain;
-        this.isBest = isBest;
         this.isVisible = isVisible;
     }
 }

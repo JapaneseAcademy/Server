@@ -37,6 +37,7 @@ public class ReviewConverter {
                     .imageUrls(imageUrls)
                     .writer(writer)
                     .createdDate(review.getCreatedAt().toLocalDate())
+                    .isBest(review.getIsBest())
                     .build();
         } catch (Exception e) {
             throw new ReviewMappingException();
@@ -54,6 +55,7 @@ public class ReviewConverter {
                     .imageUrls(imageUrls)
                     .writer(writer)
                     .createdDate(review.getCreatedAt().toLocalDate())
+                    .isBest(review.getIsBest())
                     .build();
         } catch (Exception e) {
             throw new ReviewMappingException();
