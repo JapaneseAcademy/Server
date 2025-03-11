@@ -42,23 +42,12 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public ReviewListResponse getReviewsByCourseInfoId(Long courseInfoId, Integer page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(
-                Sort.Order.desc("isForMain"),
                 Sort.Order.desc("isBest"),
                 Sort.Order.desc("createdAt")
         ));
 
         return processReview(() ->
                 reviewRepository.getReviewByCourseInfoId(courseInfoId, pageable), pageable
-        );
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ReviewListResponse getBestReviewsByCourseInfoId(Long courseInfoId, Integer page) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
-
-        return processReview(() ->
-                reviewRepository.getBestReviewByCourseInfoId(courseInfoId, pageable), pageable
         );
     }
 
@@ -126,7 +115,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     public ReviewListResponse getAllReviews(Integer page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(
-                Sort.Order.desc("isForMain"),
                 Sort.Order.desc("isBest"),
                 Sort.Order.desc("createdAt")
         ));
