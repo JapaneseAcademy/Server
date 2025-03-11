@@ -1,23 +1,21 @@
 package yeri_nihongo.admin.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import yeri_nihongo.admin.dto.request.MessageRequest;
 import yeri_nihongo.admin.dto.response.MessageResponse;
 import yeri_nihongo.exception.message.MessageSendException;
 import yeri_nihongo.member.service.MemberService;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,14 +38,11 @@ public class MessageService {
     private final MemberService memberService;
 
     public MessageResponse sendMessage(MessageRequest request) {
-        WebClient webClient = WebClient.builder()
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE + "; charset=EUC-KR")
-                .build();
+        WebClient webClient = WebClient.builder().build();
 
         String rawResponse = webClient.post()
                 .uri(MESSAGE_BASE_URI)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(buildFormData(request))
+                .body(BodyInserters.fromFormData(buildFormData(request)))
                 .retrieve()
                 .bodyToMono(String.class)
                 .doOnNext(log::info)
@@ -55,30 +50,31 @@ public class MessageService {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            MessageResponse response = objectMapper.readValue(rawResponse, MessageResponse.class);
+            JsonNode jsonNode = objectMapper.readTree(rawResponse);
 
-            if (response.getResult_code() < 0) {
-                throw new MessageSendException(response.getMessage());
+            String resultCode = jsonNode.get("result_code").asText();
+            String message = jsonNode.get("message").asText();
+
+            if (!resultCode.equals("1")) {
+                log.info(rawResponse);
+                throw new MessageSendException(message);
             }
-            return response;
+
+            return new MessageResponse(resultCode, message);
         } catch (JsonProcessingException e) {
             log.error("Failed to parse JSON: {}", rawResponse);
-            return new MessageResponse(-1, "JSON 파싱 실패", -1);
+            return new MessageResponse("-1", "JSON 파싱 실패");
         }
     }
 
     private MultiValueMap<String, String> buildFormData(MessageRequest request) {
         LinkedMultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        try {
-            formData.add("key", URLEncoder.encode(messageKey, "EUC-KR"));
-            formData.add("user_id", URLEncoder.encode(userId, "EUC-KR"));
-            formData.add("sender", URLEncoder.encode(sender, "EUC-KR"));
-            formData.add("receiver", URLEncoder.encode(getReceiver(request.getReceiverIds()), "EUC-KR"));
-            formData.add("msg", URLEncoder.encode(request.getMessage(), "EUC-KR"));
-            formData.add("testmode_yn", URLEncoder.encode(request.getTestMode(), "EUC-KR"));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("EUC-KR 인코딩 실패", e);
-        }
+            formData.add("key", messageKey);
+            formData.add("user_id", userId);
+            formData.add("sender", sender);
+            formData.add("receiver", getReceiver(request.getReceiverIds()));
+            formData.add("msg", request.getMessage());
+            formData.add("testmode_yn", request.getTestMode());
 
         return formData;
     }
