@@ -70,4 +70,10 @@ public class CommonService {
         return timeTableRepository.findById(timeTableId)
                 .orElseThrow(() -> new TimeTableNotFoundException(timeTableId));
     }
+
+    @Transactional(readOnly = true)
+    public String getCourseTitleByCourseId(Long courseId) {
+        return courseRepository.findCourseTitleByCourseId(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
+    }
 }
