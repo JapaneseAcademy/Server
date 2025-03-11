@@ -3,12 +3,15 @@ package yeri_nihongo.time.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yeri_nihongo.common.service.CommonService;
+import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.time.converter.TimeConverter;
 import yeri_nihongo.time.domain.TimeBlock;
 import yeri_nihongo.time.domain.TimeTable;
 import yeri_nihongo.time.dto.response.TimeBlockResponse;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
+import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
 import yeri_nihongo.time.repository.TimeBlockRepository;
 import yeri_nihongo.time.repository.TimeTableRepository;
 
@@ -17,6 +20,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TimeTableServiceImpl implements TimeTableService {
+
+    private final CommonService commonService;
 
     private final TimeTableRepository timeTableRepository;
     private final TimeBlockRepository timeBlockRepository;
@@ -51,5 +56,18 @@ public class TimeTableServiceImpl implements TimeTableService {
     @Override
     public int getSaleCostByTimeTableId(Long timeTableId) {
         return timeTableRepository.findSaleCostByTimeTableId(timeTableId);
+    }
+
+    @Override
+    public List<TimeTableStudentsResponse> getCourseStudents(Course course) {
+        List<TimeTable> timeTables = timeTableRepository.findTimeTablesByCourseId(course.getId());
+        return timeTables.stream()
+                .map(timeTable -> {
+                    List<TimeBlock> timeBlocks = timeBlockRepository.findTimeBlocksByTimeTableId(timeTable.getId());
+                    List<Long> students = timeTableRepository.findMemberIdsByTimeTableId(timeTable.getId());
+                    String courseTitle = commonService.getCourseTitleByCourseId(course.getId());
+                    return TimeConverter.toTimeTableStudentsResponse(timeTable, timeBlocks, courseTitle, students);
+                })
+                .toList();
     }
 }
