@@ -22,6 +22,7 @@ import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.service.MemberService;
 import yeri_nihongo.review.dto.response.ReviewListForAdminResponse;
 import yeri_nihongo.review.service.ReviewService;
+import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
 
 import java.util.List;
 
@@ -140,5 +141,17 @@ public class AdminController {
         MessageResponse response = messageService.sendMessage(request);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/time-tables")
+    public ResponseEntity<List<TimeTableStudentsResponse>> getTimeTableStudents(
+            @RequestParam("date")
+            @NotBlank(message = "날짜는 필수 입력 사항입니다.")
+            @Pattern(regexp = "^\\d{4}-(0[1-9]|1[0-2])$", message = "올바른 날짜 형식을 입력해주세요. (예: 2025-01)")
+            String date
+    ) {
+        List<TimeTableStudentsResponse> responses = courseService.getTimeTableStudentsList(date);
+
+        return ResponseEntity.ok(responses);
     }
 }

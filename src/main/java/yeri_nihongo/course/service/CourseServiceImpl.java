@@ -3,6 +3,7 @@ package yeri_nihongo.course.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
@@ -11,6 +12,7 @@ import yeri_nihongo.course.repository.CourseInfoRepository;
 import yeri_nihongo.course.repository.CourseRepository;
 import yeri_nihongo.exception.course.NoScheduledCourseException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
+import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
 import yeri_nihongo.time.service.TimeTableService;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
+    private final CommonService commonService;
     private final TimeTableService timeTableService;
 
     private final CourseRepository courseRepository;
@@ -30,7 +33,7 @@ public class CourseServiceImpl implements CourseService {
         List<Course> courses = courseRepository.searchWithFilter(date);
         List<CourseForAdminResponse> responses = courses.stream()
                 .flatMap(course -> {
-                    String title = courseRepository.findCourseTitleByCourseId(course.getId());
+                    String title = commonService.getCourseTitleByCourseId(course.getId());
                     List<TimeTableResponse> timeTableResponses = timeTableService.getTimeTablesByCourseId(course.getId());
                     return timeTableResponses.stream()
                             .map(timeTableResponse ->{
@@ -60,5 +63,14 @@ public class CourseServiceImpl implements CourseService {
     public Integer findSaleCostByCourseInfoId(Long courseInfoId) {
         return courseRepository.findSaleCostByCourseInfoId(courseInfoId)
                 .orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TimeTableStudentsResponse> getTimeTableStudentsList(String filter) {
+        List<Course> courses = courseRepository.searchWithFilter(filter);
+        return courses.stream()
+                .flatMap(course -> timeTableService.getCourseStudents(course).stream())
+                .toList();
     }
 }
