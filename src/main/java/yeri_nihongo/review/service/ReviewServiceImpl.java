@@ -138,6 +138,15 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteReview(Long reviewId) {
+        Review review = commonService.getReviewByReviewId(reviewId);
+        validateOwner(review.getEnrollment());
+
+        reviewRepository.delete(review);
+    }
+
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
         Page<Review> reviews = supplier.get();
         List<ReviewResponse> responses = reviews.stream()
