@@ -32,4 +32,9 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
             "JOIN Review r ON e.id = r.enrollment.id " +
             "WHERE e.id = :enrollmentId")
     boolean existsReviewByEnrollmentId(@Param("enrollmentId") Long enrollmentId);
+
+    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Enrollment e " +
+            "WHERE e.member.id = :memberId AND e.timeTable.id = :timeTableId")
+    boolean existsByMemberIdAndTimeTableId(@Param("memberId") Long memberId, @Param("timeTableId") Long timeTableId);
 }

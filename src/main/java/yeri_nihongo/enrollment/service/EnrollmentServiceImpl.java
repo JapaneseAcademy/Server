@@ -16,6 +16,7 @@ import yeri_nihongo.enrollment.dto.response.EnrollmentListResponse;
 import yeri_nihongo.enrollment.repository.EnrollmentRepository;
 import yeri_nihongo.exception.course.CourseInfoNotFoundException;
 import yeri_nihongo.exception.enrollment.AmountMismatchException;
+import yeri_nihongo.exception.enrollment.DuplicateEnrollmentException;
 import yeri_nihongo.exception.enrollment.UnavailableCategoryException;
 import yeri_nihongo.member.domain.Member;
 import yeri_nihongo.payment.dto.response.TossPaymentConfirmResponse;
@@ -54,8 +55,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     @Transactional
     public void createEnrollmentByAdmin(CustomEnrollmentRequest request) {
-        Member member = commonService.getMemberByMemberId(request.getMemberId());
+        Long memberId = request.getMemberId();
+        validateDuplicateEnrollment(memberId, request.getTimeTableId());
+
+        Member member = commonService.getMemberByMemberId(memberId);
         TimeTable timeTable = commonService.getTimeTableByTimeTableId(request.getTimeTableId());
+        validateCategory(timeTable, request.getCategory());
 
         Enrollment enrollment = EnrollmentConverter
                 .toEntity(member, timeTable, request);
@@ -72,12 +77,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     @Transactional
     public void createEnrollment(CreateEnrollmentRequest request) {
+        Long memberId = PrincipalDetailsService.getCurrentMemberId();
+        validateDuplicateEnrollment(memberId, request.getTimeTableId());
         validateOrderIdAndAmount(request.getOrderId(), request.getAmount());
 
         TimeTable timeTable = commonService.getTimeTableByTimeTableId(request.getTimeTableId());
         validateCategory(timeTable, request.getCategory());
 
-        Long memberId = PrincipalDetailsService.getCurrentMemberId();
         Member member = commonService.getMemberByMemberId(memberId);
 
         TossPaymentConfirmResponse confirmResponse = tossService.confirmPayment(request.getPaymentKey(), request.getOrderId(), request.getAmount());
@@ -103,6 +109,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         if (amount != savedAmount) {
             throw new AmountMismatchException();
+        }
+    }
+
+    private void validateDuplicateEnrollment(Long memberId, Long timeTableId) {
+        if (enrollmentRepository.existsByMemberIdAndTimeTableId(memberId, timeTableId)) {
+            throw new DuplicateEnrollmentException(memberId, timeTableId);
         }
     }
 }
