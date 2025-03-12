@@ -25,4 +25,7 @@ public class CustomEnrollmentRequest {
 
     @NotNull(message = "결제일은 필수 입력 정보입니다.")
     private LocalDate paymentDate;
+
+    @NotNull(message = "결제 방식은 필수 입력 정보입니다.")
+    private String method;
 }

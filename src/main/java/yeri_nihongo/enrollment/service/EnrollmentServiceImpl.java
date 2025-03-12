@@ -58,7 +58,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         TimeTable timeTable = commonService.getTimeTableByTimeTableId(request.getTimeTableId());
 
         Enrollment enrollment = EnrollmentConverter
-                .toEntity(member, timeTable, request.getCategory(), request.getPaymentAmount(), request.getPaymentDate());
+                .toEntity(member, timeTable, request);
 
         enrollmentRepository.save(enrollment);
     }
