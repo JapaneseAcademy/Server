@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.Course;
+import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.course.dto.request.CourseCreateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
 import yeri_nihongo.course.repository.CourseInfoRepository;
@@ -72,5 +74,15 @@ public class CourseServiceImpl implements CourseService {
         return courses.stream()
                 .flatMap(course -> timeTableService.getCourseStudents(course).stream())
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void createCourse(CourseCreateRequest request) {
+        CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(request.getCourseInfoId());
+        Course course = CourseConverter.toEntity(request.getDate(), courseInfo, request.getCost());
+        courseRepository.save(course);
+
+        timeTableService.createTimeTable(course, request.getTimeBlocks());
     }
 }

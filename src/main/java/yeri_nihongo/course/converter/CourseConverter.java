@@ -6,9 +6,30 @@ import yeri_nihongo.course.dto.response.*;
 import yeri_nihongo.exception.course.CourseMappingException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 
+import java.time.YearMonth;
 import java.util.List;
 
 public class CourseConverter {
+
+    public static Course toEntity(
+            String date, CourseInfo courseInfo, int cost
+    ) {
+        try {
+            String year = date.split("-")[0];
+            String month = date.split("-")[1];
+
+            YearMonth yearMonth = YearMonth.of(Integer.parseInt(year), Integer.parseInt(month));
+
+            return Course.builder()
+                    .courseInfo(courseInfo)
+                    .cost(cost)
+                    .startDate(yearMonth.atDay(1))
+                    .endDate(yearMonth.atEndOfMonth())
+                    .build();
+        } catch (Exception e) {
+            throw new CourseMappingException();
+        }
+    }
 
     public static CourseInfoResponse toCourseInfoResponse(
             CourseInfo courseInfo, List<String> descriptions, CourseResponse course

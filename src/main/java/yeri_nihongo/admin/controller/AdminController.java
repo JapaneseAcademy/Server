@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import yeri_nihongo.admin.dto.request.MessageRequest;
 import yeri_nihongo.admin.dto.response.MessageResponse;
 import yeri_nihongo.admin.service.MessageService;
+import yeri_nihongo.course.dto.request.CourseCreateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
 import yeri_nihongo.course.service.CourseInfoService;
@@ -58,6 +59,15 @@ public class AdminController {
         ReviewListForAdminResponse response = reviewService.getAllReviewsForAdmin(page);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/courses")
+    public ResponseEntity<HttpStatus> createCourse(
+            @RequestBody @Valid CourseCreateRequest request
+    ) {
+        courseService.createCourse(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/courses/{courseInfoId}/reviews")
