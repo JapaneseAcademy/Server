@@ -9,6 +9,7 @@ import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.time.converter.TimeConverter;
 import yeri_nihongo.time.domain.TimeBlock;
 import yeri_nihongo.time.domain.TimeTable;
+import yeri_nihongo.time.dto.request.TimeBlockCreateRequest;
 import yeri_nihongo.time.dto.response.TimeBlockResponse;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
@@ -69,5 +70,16 @@ public class TimeTableServiceImpl implements TimeTableService {
                     return TimeConverter.toTimeTableStudentsResponse(timeTable, timeBlocks, courseTitle, students);
                 })
                 .toList();
+    }
+
+    @Override
+    public void createTimeTable(Course course, List<TimeBlockCreateRequest> requests) {
+        TimeTable timeTable = timeTableRepository.save(TimeConverter.toTimeTableEntity(course));
+
+        List<TimeBlock> timeBlocks = requests.stream()
+                .map(request -> TimeConverter.toTimeBlockEntity(timeTable, request))
+                .toList();
+        System.out.println("timeBlocks.get(0) = " + timeBlocks.get(0).getTimeTable().getId());
+        timeBlockRepository.saveAll(timeBlocks);
     }
 }

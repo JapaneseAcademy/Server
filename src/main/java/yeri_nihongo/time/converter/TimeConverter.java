@@ -1,8 +1,11 @@
 package yeri_nihongo.time.converter;
 
+import yeri_nihongo.course.domain.Course;
+import yeri_nihongo.exception.course.CourseMappingException;
 import yeri_nihongo.exception.time.TimeTableMappingException;
 import yeri_nihongo.time.domain.TimeBlock;
 import yeri_nihongo.time.domain.TimeTable;
+import yeri_nihongo.time.dto.request.TimeBlockCreateRequest;
 import yeri_nihongo.time.dto.response.TimeBlockResponse;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
@@ -10,6 +13,29 @@ import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
 import java.util.List;
 
 public class TimeConverter {
+
+    public static TimeTable toTimeTableEntity(Course course) {
+        try {
+            return TimeTable.builder()
+                    .course(course)
+                    .build();
+        } catch (Exception e) {
+            throw new CourseMappingException();
+        }
+    }
+
+    public static TimeBlock toTimeBlockEntity(TimeTable timeTable, TimeBlockCreateRequest request) {
+        try {
+            return TimeBlock.builder()
+                    .timeTable(timeTable)
+                    .weekday(request.getWeekday())
+                    .startTime(request.getStartTime())
+                    .endTime(request.getEndTime())
+                    .build();
+        } catch (Exception e) {
+            throw new TimeTableMappingException();
+        }
+    }
 
     public static TimeBlockResponse toTimeBlockResponse(TimeBlock timeBlock) {
         try {

@@ -1,10 +1,7 @@
 package yeri_nihongo.time.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import yeri_nihongo.course.domain.Course;
@@ -12,6 +9,8 @@ import yeri_nihongo.course.domain.Course;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class TimeTable {
 
     @Id
@@ -24,12 +23,8 @@ public class TimeTable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Course course;
 
+    @Builder.Default
     private int studentCount = 0;
-
-    @Builder
-    public TimeTable(Course course) {
-        this.course = course;
-    }
 
     public void addStudentCount() {
         this.studentCount++;
