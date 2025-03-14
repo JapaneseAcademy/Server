@@ -72,6 +72,24 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
                 .fetchOne());
     }
 
+    @Override
+    public Optional<Course> findCourseByCourseInfoIdAndDate(Long courseInfoId, String date) {
+        QCourse course = QCourse.course;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        int year = Integer.parseInt(date.split("-")[0]);
+        int month = Integer.parseInt(date.split("-")[1]);
+
+        builder.and(course.courseInfo.id.eq(courseInfoId));
+        builder.and(course.startDate.year().eq(year).and(course.startDate.month().eq(month)));
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(course)
+                .where(builder)
+                .limit(1)
+                .fetchOne());
+    }
+
     private LocalDate getTargetMonth() {
         LocalDate today = LocalDate.now();
         int dayOfMonth = today.getDayOfMonth();
