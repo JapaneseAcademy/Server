@@ -21,7 +21,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Cacheable("students")
     @Query("SELECT m " +
             "FROM Member m " +
-            "WHERE m.role = STUDENT")
+            "WHERE m.role = STUDENT " +
+            "ORDER BY m.name ASC")
     List<Member> findAllStudent();
 
     @Query("SELECT m.phone " +
