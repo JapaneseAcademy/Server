@@ -12,6 +12,7 @@ import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
 import yeri_nihongo.course.repository.CourseInfoRepository;
 import yeri_nihongo.course.repository.CourseRepository;
+import yeri_nihongo.enrollment.service.EnrollmentService;
 import yeri_nihongo.exception.course.NoScheduledCourseException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
@@ -25,6 +26,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CommonService commonService;
     private final TimeTableService timeTableService;
+    private final EnrollmentService enrollmentService;
 
     private final CourseRepository courseRepository;
     private final CourseInfoRepository courseInfoRepository;
@@ -39,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
                     List<TimeTableResponse> timeTableResponses = timeTableService.getTimeTablesByCourseId(course.getId());
                     return timeTableResponses.stream()
                             .map(timeTableResponse ->{
-                                int studentCount = timeTableService.getStudentCountByTimeTableId(timeTableResponse.getTimeTableId());
+                                int studentCount = enrollmentService.getCountByTimeTableId(timeTableResponse.getTimeTableId());
                                 Integer baseCost = courseRepository.findBaseCostByCourseId(course.getId())
                                         .orElse(0);
                                 return CourseConverter.toCourseForAdminResponse(course, timeTableResponse, studentCount, title, baseCost);
