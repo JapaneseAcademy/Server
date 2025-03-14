@@ -18,11 +18,6 @@ public interface TimeTableRepository extends JpaRepository<TimeTable, Long> {
             "WHERE tt.course.id = :courseId")
     List<TimeTable> findTimeTablesByCourseId(@Param("courseId") Long courseId);
 
-    @Query("SELECT tt.studentCount " +
-            "FROM TimeTable tt " +
-            "WHERE tt.id = :timeTableId")
-    int findStudentCountByTimeTableId(@Param("timeTableId") Long timeTableId);
-
     @Query("SELECT ci " +
             "FROM TimeTable tt " +
             "JOIN Course c ON tt.course.id = c.id " +

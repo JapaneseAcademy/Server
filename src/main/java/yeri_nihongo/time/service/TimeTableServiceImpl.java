@@ -44,11 +44,6 @@ public class TimeTableServiceImpl implements TimeTableService {
     }
 
     @Override
-    public int getStudentCountByTimeTableId(Long timeTableId) {
-        return timeTableRepository.findStudentCountByTimeTableId(timeTableId);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<Enrollment> getEnrollmentsByTimeTableId(Long timeTableId) {
         return timeTableRepository.findEnrollmentsByTimeTableId(timeTableId);
