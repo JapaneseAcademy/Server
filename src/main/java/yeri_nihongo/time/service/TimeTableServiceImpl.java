@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.enrollment.domain.Enrollment;
+import yeri_nihongo.enrollment.repository.EnrollmentRepository;
+import yeri_nihongo.exception.time.TimeTableDeletionException;
 import yeri_nihongo.time.converter.TimeConverter;
 import yeri_nihongo.time.domain.TimeBlock;
 import yeri_nihongo.time.domain.TimeTable;
@@ -26,6 +28,7 @@ public class TimeTableServiceImpl implements TimeTableService {
 
     private final TimeTableRepository timeTableRepository;
     private final TimeBlockRepository timeBlockRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     @Override
     public List<TimeTableResponse> getTimeTablesByCourseId(Long courseId) {
@@ -76,5 +79,18 @@ public class TimeTableServiceImpl implements TimeTableService {
                 .toList();
 
         timeBlockRepository.saveAll(timeBlocks);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTimeTable(Long timeTableId) {
+        int studentCount = enrollmentRepository.findCountByTimeTableId(timeTableId);
+
+        if (studentCount == 0) {
+            TimeTable timeTable = commonService.getTimeTableByTimeTableId(timeTableId);
+            timeTableRepository.delete(timeTable);
+        } else {
+            throw new TimeTableDeletionException(timeTableId);
+        }
     }
 }

@@ -24,6 +24,7 @@ import yeri_nihongo.member.service.MemberService;
 import yeri_nihongo.review.dto.response.ReviewListForAdminResponse;
 import yeri_nihongo.review.service.ReviewService;
 import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
+import yeri_nihongo.time.service.TimeTableService;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class AdminController {
     private final CourseService courseService;
     private final CourseInfoService courseInfoService;
     private final EnrollmentService enrollmentService;
+    private final TimeTableService timeTableService;
     private final MessageService messageService;
 
     @PostMapping("/token")
@@ -163,5 +165,14 @@ public class AdminController {
         List<TimeTableStudentsResponse> responses = courseService.getTimeTableStudentsList(date);
 
         return ResponseEntity.ok(responses);
+    }
+
+    @DeleteMapping("/time-tables/{timeTableId}")
+    public ResponseEntity<HttpStatus> deleteTimeTable(
+            @PathVariable Long timeTableId
+    ) {
+        timeTableService.deleteTimeTable(timeTableId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

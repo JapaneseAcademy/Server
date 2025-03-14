@@ -19,4 +19,6 @@ public interface TimeTableService {
     List<TimeTableStudentsResponse> getCourseStudents(Course course);
 
     void createTimeTable(Course course, List<TimeBlockCreateRequest> requests);
+
+    void deleteTimeTable(Long timeTableId);
 }
