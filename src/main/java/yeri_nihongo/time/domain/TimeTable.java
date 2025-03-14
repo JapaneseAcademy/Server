@@ -8,8 +8,8 @@ import yeri_nihongo.course.domain.Course;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class TimeTable {
 
@@ -22,11 +22,4 @@ public class TimeTable {
     @JoinColumn(name = "courseId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Course course;
-
-    @Builder.Default
-    private int studentCount = 0;
-
-    public void addStudentCount() {
-        this.studentCount++;
-    }
 }
