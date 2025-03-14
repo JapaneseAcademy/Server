@@ -79,7 +79,7 @@ public class TimeTableServiceImpl implements TimeTableService {
         List<TimeBlock> timeBlocks = requests.stream()
                 .map(request -> TimeConverter.toTimeBlockEntity(timeTable, request))
                 .toList();
-        System.out.println("timeBlocks.get(0) = " + timeBlocks.get(0).getTimeTable().getId());
+
         timeBlockRepository.saveAll(timeBlocks);
     }
 }
