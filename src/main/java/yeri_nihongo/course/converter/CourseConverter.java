@@ -12,7 +12,7 @@ import java.util.List;
 public class CourseConverter {
 
     public static Course toEntity(
-            String date, CourseInfo courseInfo, int cost
+            String date, CourseInfo courseInfo
     ) {
         try {
             String year = date.split("-")[0];
@@ -22,7 +22,7 @@ public class CourseConverter {
 
             return Course.builder()
                     .courseInfo(courseInfo)
-                    .cost(cost)
+                    .cost(courseInfo.getCost())
                     .startDate(yearMonth.atDay(1))
                     .endDate(yearMonth.atEndOfMonth())
                     .build();

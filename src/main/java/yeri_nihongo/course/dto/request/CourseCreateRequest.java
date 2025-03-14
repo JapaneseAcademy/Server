@@ -25,7 +25,4 @@ public class CourseCreateRequest {
 
     @NotNull(message = "강의 분반 시간은 필수 입력 사항입니다.")
     private List<TimeBlockCreateRequest> timeBlocks;
-
-    @NotNull(message = "강의 판매 가격은 필수 입력 사항입니다.")
-    private Integer cost;
 }

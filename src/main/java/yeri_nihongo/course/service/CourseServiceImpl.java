@@ -79,9 +79,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public void createCourse(CourseCreateRequest request) {
-        CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(request.getCourseInfoId());
-        Course course = CourseConverter.toEntity(request.getDate(), courseInfo, request.getCost());
-        courseRepository.save(course);
+        Course course = courseRepository.findCourseByCourseInfoIdAndDate(request.getCourseInfoId(), request.getDate())
+                .orElseGet(() -> {
+                    System.out.println("new course created");
+                    CourseInfo courseInfo = commonService.getCourseInfoByCourseInfoId(request.getCourseInfoId());
+                    Course newCourse = CourseConverter.toEntity(request.getDate(), courseInfo);
+                    return courseRepository.save(newCourse);
+                });
 
         timeTableService.createTimeTable(course, request.getTimeBlocks());
     }
