@@ -37,4 +37,9 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
             "FROM Enrollment e " +
             "WHERE e.member.id = :memberId AND e.timeTable.id = :timeTableId")
     boolean existsByMemberIdAndTimeTableId(@Param("memberId") Long memberId, @Param("timeTableId") Long timeTableId);
+
+    @Query("SELECT COUNT(e) " +
+            "FROM Enrollment e " +
+            "WHERE e.timeTable.id = :timeTableId")
+    int findCountByTimeTableId(@Param("timeTableId") Long timeTableId);
 }

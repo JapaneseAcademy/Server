@@ -16,4 +16,6 @@ public interface EnrollmentService {
     CourseInfo getCourseInfoByEnrollmentId(Long enrollmentId);
 
     void createEnrollment(CreateEnrollmentRequest request);
+
+    int getCountByTimeTableId(Long timeTableId);
 }

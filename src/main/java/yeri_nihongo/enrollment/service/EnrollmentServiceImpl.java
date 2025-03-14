@@ -90,8 +90,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         Enrollment enrollment = EnrollmentConverter.toEntity(member, timeTable, request.getCategory(), confirmResponse);
         enrollmentRepository.save(enrollment);
+    }
 
-        timeTable.addStudentCount();
+    @Override
+    public int getCountByTimeTableId(Long timeTableId) {
+        return enrollmentRepository.findCountByTimeTableId(timeTableId);
     }
 
     private void validateCategory(TimeTable timeTable, Category category) {
