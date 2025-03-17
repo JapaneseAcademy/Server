@@ -16,8 +16,7 @@ public class EnrollmentListResponse {
     private String mainImageUrl;
     private LocalDate paymentDate;
     private int paymentAmount;
+    private String method;
     private Category category;
     private boolean isReviewed;
-    
-    // TODO: 결제 수단 추가
 }

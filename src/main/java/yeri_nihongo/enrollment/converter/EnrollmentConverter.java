@@ -56,6 +56,7 @@ public class EnrollmentConverter {
                     .paymentAmount(enrollment.getPaymentAmount())
                     .paymentDate(enrollment.getPaymentAt().toLocalDate())
                     .category(enrollment.getCategory())
+                    .method(enrollment.getMethod())
                     .isReviewed(isReviewed)
                     .build();
         } catch (Exception e) {
