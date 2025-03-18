@@ -147,13 +147,22 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.delete(review);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewListResponse getMyReviews(Integer page) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Order.desc("createdAt")));
+        Long memberId = PrincipalDetailsService.getCurrentMemberId();
+
+        return processReview(() -> reviewRepository.findReviewsByMemberId(memberId, pageable), pageable);
+    }
+
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
         Page<Review> reviews = supplier.get();
         List<ReviewResponse> responses = reviews.stream()
-                .map(reviewProjection -> {
-                    List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(reviewProjection.getId());
-                    String writer = getNameByReviewId(reviewProjection.getId());
-                    return ReviewConverter.toReviewResponse(reviewProjection, imageUrls, writer);
+                .map(review -> {
+                    List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(review.getId());
+                    String writer = getNameByReviewId(review.getId());
+                    return ReviewConverter.toReviewResponse(review, imageUrls, writer);
                 })
                 .toList();
 

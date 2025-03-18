@@ -71,4 +71,13 @@ public class ReviewController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("/members/me/reviews")
+    public ResponseEntity<ReviewListResponse> getMyReviews(
+            @RequestParam(value = "page", defaultValue = "0") Integer page
+    ) {
+        ReviewListResponse response = reviewService.getMyReviews(page);
+
+        return ResponseEntity.ok(response);
+    }
 }

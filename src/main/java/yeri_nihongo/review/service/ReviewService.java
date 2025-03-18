@@ -31,4 +31,6 @@ public interface ReviewService {
     void createReview(ReviewCreateRequest request, List<MultipartFile> images);
 
     void deleteReview(Long reviewId);
+
+    ReviewListResponse getMyReviews(Integer page);
 }
