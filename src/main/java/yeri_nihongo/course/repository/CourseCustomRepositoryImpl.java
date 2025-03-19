@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.domain.QCourse;
+import yeri_nihongo.course.domain.QCourseInfo;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -22,6 +23,7 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
     public List<Course> searchWithFilter(String filter) {
         BooleanBuilder builder = new BooleanBuilder();
         QCourse course = QCourse.course;
+        QCourseInfo courseInfo = QCourseInfo.courseInfo;
 
         String[] date = filter.split("-");
         int year = Integer.parseInt(date[0]);
@@ -31,7 +33,9 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
 
         return queryFactory
                 .selectFrom(course)
+                .leftJoin(course.courseInfo, courseInfo)
                 .where(builder)
+                .orderBy(courseInfo.level.asc())
                 .fetch();
     }
 
