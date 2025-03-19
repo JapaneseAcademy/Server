@@ -18,6 +18,7 @@ import yeri_nihongo.course.service.CourseInfoService;
 import yeri_nihongo.course.service.CourseService;
 import yeri_nihongo.enrollment.dto.request.CustomEnrollmentRequest;
 import yeri_nihongo.enrollment.service.EnrollmentService;
+import yeri_nihongo.member.dto.request.MemberNoteRequest;
 import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.service.MemberService;
@@ -174,5 +175,15 @@ public class AdminController {
         timeTableService.deleteTimeTable(timeTableId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/members/{memberId}")
+    public ResponseEntity<HttpStatus> updateMemberNote(
+            @PathVariable Long memberId,
+            @RequestBody MemberNoteRequest request
+    ) {
+        memberService.updateMemberNote(memberId, request);
+
+        return ResponseEntity.ok().build();
     }
 }

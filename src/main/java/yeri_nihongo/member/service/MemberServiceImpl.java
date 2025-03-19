@@ -15,6 +15,7 @@ import yeri_nihongo.exception.member.UserNotFoundException;
 import yeri_nihongo.member.converter.MemberConverter;
 import yeri_nihongo.member.domain.Member;
 import yeri_nihongo.member.domain.Role;
+import yeri_nihongo.member.dto.request.MemberNoteRequest;
 import yeri_nihongo.member.dto.request.MemberUpdateRequest;
 import yeri_nihongo.member.dto.response.CourseStudentResponse;
 import yeri_nihongo.member.dto.response.MemberForAdminResponse;
@@ -97,6 +98,13 @@ public class MemberServiceImpl implements MemberService{
     public String getPhoneByMemberId(Long memberId) {
         return memberRepository.findPhoneByMemberId(memberId)
                 .orElseThrow(() -> new UserNotFoundException(memberId));
+    }
+
+    @Override
+    @Transactional
+    public void updateMemberNote(Long memberId, MemberNoteRequest request) {
+        Member member = commonService.getMemberByMemberId(memberId);
+        member.updateNote(request.getNote());
     }
 
     private void validateMemberDoesNotExist(String loginId) {
