@@ -2,6 +2,7 @@ package yeri_nihongo.member.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import yeri_nihongo.enrollment.domain.Category;
 
 import java.time.LocalDate;
 
@@ -12,4 +13,5 @@ public class CourseStudentResponse {
     private String name;
     private String phone;
     private LocalDate paymentDate;
+    private Category category;
 }
