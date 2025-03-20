@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import yeri_nihongo.common.service.RedisService;
+import yeri_nihongo.enrollment.domain.Category;
+import yeri_nihongo.enrollment.repository.EnrollmentRepository;
+import yeri_nihongo.exception.enrollment.MaxLiveEnrollmentException;
 import yeri_nihongo.exception.enrollment.TossConfirmFailedException;
 import yeri_nihongo.payment.dto.response.OrderIdResponse;
 import yeri_nihongo.payment.dto.response.TossConfirmFailResponse;
@@ -31,8 +34,12 @@ public class TossServiceImpl implements TossService {
 
     public static final String BASE_ORDER_ID = "YERI-JP-ORDER-TOSS-";
 
+    private static final int MAX_LIVE_ENROLLMENT = 12;
+
     private final TimeTableService timeTableService;
     private final RedisService redisService;
+
+    private final EnrollmentRepository enrollmentRepository;
 
     @Override
     public TossPaymentConfirmResponse confirmPayment(String paymentKey, String orderId, int amount) {
@@ -58,6 +65,8 @@ public class TossServiceImpl implements TossService {
     @Override
     @Transactional(readOnly = true)
     public OrderIdResponse generateOrderId(Long timeTableId) {
+        validateLiveEnrollment(timeTableId);
+
         String orderId = BASE_ORDER_ID + UUID.randomUUID();
         int amount = timeTableService.getSaleCostByTimeTableId(timeTableId);
 
@@ -72,5 +81,12 @@ public class TossServiceImpl implements TossService {
                 "orderId", orderId,
                 "amount", amount
         );
+    }
+
+    private void validateLiveEnrollment(Long timeTableId) {
+        int liveCount = enrollmentRepository.countEnrollmentByTimeTableIdAndCategory(timeTableId, Category.LIVE);
+        if (liveCount >= MAX_LIVE_ENROLLMENT) {
+            throw new MaxLiveEnrollmentException(timeTableId);
+        }
     }
 }

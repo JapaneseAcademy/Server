@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import yeri_nihongo.course.domain.CourseInfo;
+import yeri_nihongo.enrollment.domain.Category;
 import yeri_nihongo.enrollment.domain.Enrollment;
 
 import java.util.List;
@@ -42,4 +43,12 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
             "FROM Enrollment e " +
             "WHERE e.timeTable.id = :timeTableId")
     int findCountByTimeTableId(@Param("timeTableId") Long timeTableId);
+
+    @Query("SELECT COUNT(e) " +
+            "FROM Enrollment e " +
+            "WHERE e.timeTable.id = :timeTableId AND e.category = category")
+    int countEnrollmentByTimeTableIdAndCategory(
+            @Param("timeTableId") Long timeTableId,
+            @Param("category")Category category
+            );
 }
