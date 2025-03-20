@@ -6,11 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.CourseInfo;
-import yeri_nihongo.course.domain.Level;
 import yeri_nihongo.course.dto.response.*;
 import yeri_nihongo.course.repository.CourseInfoRepository;
 import yeri_nihongo.course.repository.DescriptionRepository;
-import yeri_nihongo.exception.course.InvalidLevelException;
 
 import java.util.List;
 
@@ -69,13 +67,5 @@ public class CourseInfoServiceImpl implements CourseInfoService {
                     Integer saleCost = courseService.findSaleCostByCourseInfoId(courseInfo.getId());
                     return CourseConverter.toCourseListForAdminResponse(courseInfo, descriptions, saleCost != null ? saleCost : 0);
                 }).toList();
-    }
-
-    private Level validateLevel(String level) {
-        try {
-            return Level.valueOf(level);
-        } catch (Exception e) {
-            throw new InvalidLevelException(level);
-        }
     }
 }
