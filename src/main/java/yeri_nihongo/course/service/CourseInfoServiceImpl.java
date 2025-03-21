@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.converter.CourseConverter;
+import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.course.dto.response.*;
 import yeri_nihongo.course.repository.CourseInfoRepository;
@@ -38,10 +39,10 @@ public class CourseInfoServiceImpl implements CourseInfoService {
         List<CourseInfo> courseInfos = courseInfoRepository.findAll();
 
         return courseInfos.stream()
-                .filter(courseInfo -> courseService.findSaleCostByCourseInfoId(courseInfo.getId()) != null)
+                .filter(courseInfo -> courseService.getExistsCurrentCourseByCourseInfoId(courseInfo.getId()))
                 .map(courseInfo -> {
-                    int saleCost = courseService.findSaleCostByCourseInfoId(courseInfo.getId());
-                    return CourseConverter.toCourseListResponse(courseInfo, saleCost);
+                    Course course = courseService.getCurrentCourseEntityByCourseInfoId(courseInfo.getId());
+                    return CourseConverter.toCourseListResponse(courseInfo, course);
                 })
                 .toList();
     }
@@ -62,10 +63,11 @@ public class CourseInfoServiceImpl implements CourseInfoService {
         List<CourseInfo> courseInfos = courseInfoRepository.findAll();
 
         return courseInfos.stream()
+                .filter(courseInfo -> courseService.getExistsCurrentCourseByCourseInfoId(courseInfo.getId()))
                 .map(courseInfo -> {
                     List<String> descriptions = descriptionRepository.getDescriptionImageUrlsByCourseInfoId(courseInfo.getId());
-                    Integer saleCost = courseService.findSaleCostByCourseInfoId(courseInfo.getId());
-                    return CourseConverter.toCourseListForAdminResponse(courseInfo, descriptions, saleCost != null ? saleCost : 0);
+                    Course course = courseService.getCurrentCourseEntityByCourseInfoId(courseInfo.getId());
+                    return CourseConverter.toCourseListForAdminResponse(courseInfo, descriptions, course);
                 }).toList();
     }
 }

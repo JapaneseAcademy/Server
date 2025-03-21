@@ -65,12 +65,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Integer findSaleCostByCourseInfoId(Long courseInfoId) {
-        return courseRepository.findSaleCostByCourseInfoId(courseInfoId)
-                .orElse(null);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<TimeTableStudentsResponse> getTimeTableStudentsList(String filter) {
         List<Course> courses = courseRepository.searchWithFilter(filter);
@@ -98,5 +92,16 @@ public class CourseServiceImpl implements CourseService {
     public void updateSaleCost(Long courseId, CourseUpdateRequest request) {
         Course course = commonService.getCourseByCourseId(courseId);
         course.updateCost(request.getCost());
+    }
+
+    @Override
+    public Course getCurrentCourseEntityByCourseInfoId(Long courseInfoId) {
+        return courseRepository.findCurrentCourseByCourseInfoId(courseInfoId)
+                .orElseThrow(() -> new NoScheduledCourseException(courseInfoId));
+    }
+
+    @Override
+    public boolean getExistsCurrentCourseByCourseInfoId(Long courseInfoId) {
+        return courseRepository.existsCurrentCourseByCourseInfoId(courseInfoId);
     }
 }
