@@ -41,4 +41,8 @@ public class Course {
         this.endDate = endDate;
         this.cost = cost;
     }
+
+    public void updateCost(int cost) {
+        this.cost = cost;
+    }
 }
