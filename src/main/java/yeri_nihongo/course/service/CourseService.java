@@ -1,6 +1,7 @@
 package yeri_nihongo.course.service;
 
 import yeri_nihongo.course.dto.request.CourseCreateRequest;
+import yeri_nihongo.course.dto.request.CourseUpdateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
 import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
@@ -18,4 +19,6 @@ public interface CourseService {
     List<TimeTableStudentsResponse> getTimeTableStudentsList(String filter);
 
     void createCourse(CourseCreateRequest request);
+
+    void updateSaleCost(Long courseId, CourseUpdateRequest request);
 }

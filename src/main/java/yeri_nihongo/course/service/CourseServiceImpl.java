@@ -8,6 +8,7 @@ import yeri_nihongo.course.converter.CourseConverter;
 import yeri_nihongo.course.domain.Course;
 import yeri_nihongo.course.domain.CourseInfo;
 import yeri_nihongo.course.dto.request.CourseCreateRequest;
+import yeri_nihongo.course.dto.request.CourseUpdateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseResponse;
 import yeri_nihongo.course.repository.CourseInfoRepository;
@@ -90,5 +91,12 @@ public class CourseServiceImpl implements CourseService {
                 });
 
         timeTableService.createTimeTable(course, request.getTimeBlocks());
+    }
+
+    @Override
+    @Transactional
+    public void updateSaleCost(Long courseId, CourseUpdateRequest request) {
+        Course course = commonService.getCourseByCourseId(courseId);
+        course.updateCost(request.getCost());
     }
 }

@@ -12,6 +12,7 @@ import yeri_nihongo.admin.dto.request.MessageRequest;
 import yeri_nihongo.admin.dto.response.MessageResponse;
 import yeri_nihongo.admin.service.MessageService;
 import yeri_nihongo.course.dto.request.CourseCreateRequest;
+import yeri_nihongo.course.dto.request.CourseUpdateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
 import yeri_nihongo.course.service.CourseInfoService;
@@ -183,6 +184,16 @@ public class AdminController {
             @RequestBody MemberNoteRequest request
     ) {
         memberService.updateMemberNote(memberId, request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/courses/{courseId}")
+    public ResponseEntity<HttpStatus> updateSaleCost(
+            @PathVariable Long courseId,
+            @RequestBody @Valid CourseUpdateRequest request
+    ) {
+        courseService.updateSaleCost(courseId, request);
 
         return ResponseEntity.ok().build();
     }
