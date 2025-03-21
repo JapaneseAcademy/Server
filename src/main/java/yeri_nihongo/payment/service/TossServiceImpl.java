@@ -64,8 +64,8 @@ public class TossServiceImpl implements TossService {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderIdResponse generateOrderId(Long timeTableId) {
-        validateLiveEnrollment(timeTableId);
+    public OrderIdResponse generateOrderId(Long timeTableId, Category category) {
+        validateLiveEnrollment(timeTableId, category);
 
         String orderId = BASE_ORDER_ID + UUID.randomUUID();
         int amount = timeTableService.getSaleCostByTimeTableId(timeTableId);
@@ -83,7 +83,11 @@ public class TossServiceImpl implements TossService {
         );
     }
 
-    private void validateLiveEnrollment(Long timeTableId) {
+    private void validateLiveEnrollment(Long timeTableId, Category category) {
+        if (!category.equals(Category.LIVE)) {
+            return;
+        }
+
         int liveCount = enrollmentRepository.countEnrollmentByTimeTableIdAndCategory(timeTableId, Category.LIVE);
         if (liveCount >= MAX_LIVE_ENROLLMENT) {
             throw new MaxLiveEnrollmentException(timeTableId);

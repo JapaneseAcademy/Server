@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import yeri_nihongo.enrollment.domain.Category;
 import yeri_nihongo.payment.dto.response.OrderIdResponse;
 import yeri_nihongo.payment.service.TossService;
 
@@ -18,9 +19,10 @@ public class PaymentController {
 
     @GetMapping("/toss")
     public ResponseEntity<OrderIdResponse> getOrderId(
-            @RequestParam("timeTableId") Long timeTableId
-    ) {
-        OrderIdResponse response = tossService.generateOrderId(timeTableId);
+            @RequestParam("timeTableId") Long timeTableId,
+            @RequestParam("category") Category category
+            ) {
+        OrderIdResponse response = tossService.generateOrderId(timeTableId, category);
 
         return ResponseEntity.ok(response);
     }
