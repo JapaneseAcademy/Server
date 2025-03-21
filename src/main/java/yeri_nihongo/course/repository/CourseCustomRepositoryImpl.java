@@ -58,25 +58,6 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
     }
 
     @Override
-    public Optional<Integer> findSaleCostByCourseInfoId(Long courseInfoId) {
-        QCourse course = QCourse.course;
-
-        LocalDate targetMonth = getTargetMonth();
-
-        LocalDate firstDayOfTargetMonth = targetMonth.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate lastDayOfTargetMonth = targetMonth.with(TemporalAdjusters.lastDayOfMonth());
-
-        return Optional.ofNullable(queryFactory
-                .select(course.cost)
-                .from(course)
-                .where(course.courseInfo.id.eq(courseInfoId)
-                        .and(course.startDate.between(firstDayOfTargetMonth, lastDayOfTargetMonth)))
-                .orderBy(course.startDate.asc())
-                .limit(1)
-                .fetchOne());
-    }
-
-    @Override
     public Optional<Course> findCourseByCourseInfoIdAndDate(Long courseInfoId, String date) {
         QCourse course = QCourse.course;
         BooleanBuilder builder = new BooleanBuilder();
@@ -92,6 +73,21 @@ public class CourseCustomRepositoryImpl implements CourseCustomRepository {
                 .where(builder)
                 .limit(1)
                 .fetchOne());
+    }
+
+    @Override
+    public boolean existsCurrentCourseByCourseInfoId(Long courseInfoId) {
+        QCourse course = QCourse.course;
+
+        LocalDate targetMonth = getTargetMonth();
+        LocalDate firstDayOfTargetMonth = targetMonth.with(TemporalAdjusters.firstDayOfMonth());
+
+        return queryFactory
+                .select(course.id)
+                .from(course)
+                .where(course.courseInfo.id.eq(courseInfoId)
+                        .and(course.startDate.eq(firstDayOfTargetMonth)))
+                .fetchFirst() != null;
     }
 
     private LocalDate getTargetMonth() {

@@ -11,7 +11,7 @@ public interface CourseCustomRepository {
 
     Optional<Course> findCurrentCourseByCourseInfoId(Long courseInfoId);
 
-    Optional<Integer> findSaleCostByCourseInfoId(Long courseInfoId);
-
     Optional<Course> findCourseByCourseInfoIdAndDate(Long courseInfoId, String date);
+
+    boolean existsCurrentCourseByCourseInfoId(Long courseInfoId);
 }
