@@ -197,4 +197,13 @@ public class AdminController {
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/enrollments/{enrollmentId}")
+    public ResponseEntity<HttpStatus> deleteEnrollment(
+            @PathVariable Long enrollmentId
+    ) {
+        enrollmentService.deleteEnrollment(enrollmentId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

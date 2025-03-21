@@ -97,6 +97,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return enrollmentRepository.findCountByTimeTableId(timeTableId);
     }
 
+    @Override
+    @Transactional
+    public void deleteEnrollment(Long enrollmentId) {
+        Enrollment enrollment = commonService.getEnrollmentByEnrollmentId(enrollmentId);
+        enrollmentRepository.delete(enrollment);
+    }
+
     private void validateCategory(TimeTable timeTable, Category category) {
         CourseInfo courseInfo = timeTableRepository.findCourseInfoByTimeTableId(timeTable.getId());
 

@@ -18,4 +18,6 @@ public interface EnrollmentService {
     void createEnrollment(CreateEnrollmentRequest request);
 
     int getCountByTimeTableId(Long timeTableId);
+
+    void deleteEnrollment(Long enrollmentId);
 }
