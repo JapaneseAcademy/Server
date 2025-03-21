@@ -16,14 +16,13 @@ public class RedisService {
     
     // 결제 승인 제한 시간 10분
     private static final long ORDER_EXPIRE_TIME = 1000 * 60 * 10;
-    private static final String YOUTUBE_KEY = "YoutubeId";
 
-    public void saveYoutubeUrl(String youtubeUrl) {
-        redisTemplate.opsForValue().set(YOUTUBE_KEY, youtubeUrl);
+    public void saveImageUrl(String key, String imageUrl) {
+        redisTemplate.opsForValue().set(key, imageUrl);
     }
 
-    public String getYoutubeUrl() {
-        return redisTemplate.opsForValue().get(YOUTUBE_KEY);
+    public String getImageUrl(String key) {
+        return redisTemplate.opsForValue().get(key);
     }
 
     private String getRefreshTokenKey(String id) {
