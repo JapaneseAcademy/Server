@@ -33,12 +33,12 @@ public class SecurityConfig {
             "/api/v1/courses/**",
             "/api/v1/reviews",
             "/api/v1/reviews/**",
-            "/api/v1/main/youtube"
+            "/api/v1/main/**"
     };
 
     String[] forInstructorEndpoints = {
             "/api/v1/admin/**",
-            "/api/v1/main/youtube"
+            "/api/v1/main/**"
     };
 
     @Bean
