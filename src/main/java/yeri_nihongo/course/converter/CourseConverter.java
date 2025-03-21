@@ -73,9 +73,6 @@ public class CourseConverter {
             CourseInfo courseInfo, Course course
     ) {
         try {
-            LocalDate localDate = course.getStartDate();
-            String date = localDate.getYear() + "-" + localDate.getMonthValue();
-
             return CourseListResponse.builder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
@@ -86,7 +83,7 @@ public class CourseConverter {
                     .isRecorded(courseInfo.getIsRecorded())
                     .mainImageUrl(courseInfo.getMainImageUrl())
                     .level(courseInfo.getLevel())
-                    .date(date)
+                    .date(getDate(course))
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();
@@ -127,9 +124,6 @@ public class CourseConverter {
             CourseInfo courseInfo, List<String> descriptions, Course course
     ) {
         try {
-            LocalDate localDate = course.getStartDate();
-            String date = localDate.getYear() + "-" + localDate.getMonthValue();
-
             return CourseListForAdminResponse.adminBuilder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
@@ -141,10 +135,15 @@ public class CourseConverter {
                     .mainImageUrl(courseInfo.getMainImageUrl())
                     .descriptions(descriptions)
                     .level(courseInfo.getLevel())
-                    .date(date)
+                    .date(getDate(course))
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();
         }
+    }
+
+    private static String getDate(Course course) {
+        LocalDate localDate = course.getStartDate();
+        return String.format("%d-%02d", localDate.getYear(), localDate.getMonthValue());
     }
 }
