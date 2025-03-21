@@ -14,7 +14,10 @@ import yeri_nihongo.exception.auth.UserForbiddenException;
 import yeri_nihongo.review.converter.ReviewConverter;
 import yeri_nihongo.review.domain.Review;
 import yeri_nihongo.review.dto.request.ReviewCreateRequest;
-import yeri_nihongo.review.dto.response.*;
+import yeri_nihongo.review.dto.response.ReviewDetailResponse;
+import yeri_nihongo.review.dto.response.ReviewForAdminResponse;
+import yeri_nihongo.review.dto.response.ReviewListForAdminResponse;
+import yeri_nihongo.review.dto.response.ReviewListResponse;
 import yeri_nihongo.review.repository.ReviewRepository;
 
 import java.util.List;
@@ -158,15 +161,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     private ReviewListResponse processReview(Supplier<Page<Review>> supplier, Pageable pageable) {
         Page<Review> reviews = supplier.get();
-        List<ReviewResponse> responses = reviews.stream()
-                .map(review -> {
-                    List<String> imageUrls = reviewRepository.getImageUrlsByReviewId(review.getId());
-                    String writer = getNameByReviewId(review.getId());
-                    return ReviewConverter.toReviewResponse(review, imageUrls, writer);
-                })
+        List<ReviewDetailResponse> responses = reviews.stream()
+                .map(review -> getReviewDetailResponse(review, ReviewConverter::toReviewDetailResponse))
                 .toList();
 
-        PageImpl<ReviewResponse> reviewResponses = new PageImpl<>(responses, pageable, reviews.getTotalElements());
+        PageImpl<ReviewDetailResponse> reviewResponses = new PageImpl<>(responses, pageable, reviews.getTotalElements());
         return ReviewConverter.toReviewListResponse(reviewResponses);
     }
 

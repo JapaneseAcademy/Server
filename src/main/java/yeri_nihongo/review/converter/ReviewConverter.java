@@ -63,10 +63,10 @@ public class ReviewConverter {
     }
 
     public static ReviewListResponse toReviewListResponse(
-            Page<ReviewResponse> responses
+            Page<ReviewDetailResponse> responses
     ) {
         try {
-            List<ReviewResponse> reviews = responses.toList();
+            List<ReviewDetailResponse> reviews = responses.toList();
             return ReviewListResponse.builder()
                     .reviews(reviews)
                     .listSize(reviews.size())

@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class ReviewListResponse {
 
-    private List<ReviewResponse> reviews;
+    private List<ReviewDetailResponse> reviews;
     private Integer listSize;
     private Integer totalPage;
     private Long totalElements;
