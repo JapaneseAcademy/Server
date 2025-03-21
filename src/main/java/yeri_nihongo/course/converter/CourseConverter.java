@@ -6,6 +6,7 @@ import yeri_nihongo.course.dto.response.*;
 import yeri_nihongo.exception.course.CourseMappingException;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -69,19 +70,23 @@ public class CourseConverter {
     }
 
     public static CourseListResponse toCourseListResponse(
-            CourseInfo courseInfo, int saleCost
+            CourseInfo courseInfo, Course course
     ) {
         try {
+            LocalDate localDate = course.getStartDate();
+            String date = localDate.getYear() + "-" + localDate.getMonthValue();
+
             return CourseListResponse.builder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
                     .baseCost(courseInfo.getCost())
-                    .saleCost(saleCost)
+                    .saleCost(course.getCost())
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
                     .mainImageUrl(courseInfo.getMainImageUrl())
                     .level(courseInfo.getLevel())
+                    .date(date)
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();
@@ -119,20 +124,24 @@ public class CourseConverter {
     }
 
     public static CourseListForAdminResponse toCourseListForAdminResponse(
-            CourseInfo courseInfo, List<String> descriptions, Integer saleCost
+            CourseInfo courseInfo, List<String> descriptions, Course course
     ) {
         try {
+            LocalDate localDate = course.getStartDate();
+            String date = localDate.getYear() + "-" + localDate.getMonthValue();
+
             return CourseListForAdminResponse.adminBuilder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
                     .baseCost(courseInfo.getCost())
-                    .saleCost(saleCost)
+                    .saleCost(course.getCost())
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
                     .mainImageUrl(courseInfo.getMainImageUrl())
                     .descriptions(descriptions)
                     .level(courseInfo.getLevel())
+                    .date(date)
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();

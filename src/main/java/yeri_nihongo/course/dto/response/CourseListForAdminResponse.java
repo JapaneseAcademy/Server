@@ -22,9 +22,10 @@ public class CourseListForAdminResponse extends CourseListResponse{
             boolean isOnline,
             boolean isRecorded,
             Level level,
+            String date,
             List<String> descriptions
     ) {
-        super(courseInfoId, title, baseCost, saleCost, mainImageUrl, isLive, isOnline, isRecorded, level);
+        super(courseInfoId, title, baseCost, saleCost, mainImageUrl, isLive, isOnline, isRecorded, level, date);
         this.descriptions = descriptions;
     }
 }
