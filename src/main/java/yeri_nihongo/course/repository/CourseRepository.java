@@ -6,16 +6,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import yeri_nihongo.course.domain.Course;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long>, CourseCustomRepository {
-
-    @Query("SELECT c " +
-            "FROM Course c " +
-            "WHERE c.courseInfo.id = :courseInfoId")
-    List<Course> findCoursesByCourseInfoId(@Param("courseInfoId") Long courseInfoId);
 
     @Query("SELECT ci.title " +
             "FROM Course c " +
