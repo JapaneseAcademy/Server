@@ -15,7 +15,7 @@ public class LoggingAspect {
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         try {
-            log.info("실행 시작: {} - args: {}", joinPoint.getSignature(), joinPoint.getArgs());
+            log.debug("실행 시작: {} - args: {}", joinPoint.getSignature(), joinPoint.getArgs());
             return joinPoint.proceed();
         } finally {
             long executionTime = System.currentTimeMillis() - start;

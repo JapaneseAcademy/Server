@@ -20,6 +20,6 @@ public class ApiLoggingAspect {
         if (attributes == null) return;
 
         HttpServletRequest request = attributes.getRequest();
-        log.info("API 요청: [{}] {} - 메서드: {}", request.getMethod(), request.getRequestURI(), joinPoint.getSignature());
+        log.debug("API 요청: [{}] {} - 메서드: {}", request.getMethod(), request.getRequestURI(), joinPoint.getSignature());
     }
 }
