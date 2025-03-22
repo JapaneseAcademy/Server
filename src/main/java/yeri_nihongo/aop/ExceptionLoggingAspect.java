@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExceptionLoggingAspect {
 
-    @AfterThrowing(pointcut = "execution(* com.academy.backend.service..*(..))", throwing = "ex")
+    @AfterThrowing(pointcut = "execution(* yeri_nihongo..controller..*(..))", throwing = "ex")
     public void logException(Exception ex) {
         log.error("예외 발생: {}", ex.getMessage(), ex);
     }

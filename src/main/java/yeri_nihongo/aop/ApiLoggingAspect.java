@@ -14,7 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 public class ApiLoggingAspect {
 
-    @Before("execution(* com.academy.backend.controller..*(..))") // 모든 컨트롤러 메서드 실행 전에 로깅
+    @Before("execution(* yeri_nihongo..controller..*(..))")
     public void logRequest(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) return;
