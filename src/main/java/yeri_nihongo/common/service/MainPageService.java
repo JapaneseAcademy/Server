@@ -11,19 +11,19 @@ public class MainPageService {
     private final S3Service s3Service;
     private final RedisService redisService;
 
-    private static final String CALENDER_PATH = "calender/";
+    private static final String CALENDAR_PATH = "calendar/";
 
-    private static final String CALENDER_KEY = "CalenderId";
+    private static final String CALENDAR_KEY = "CalendarId";
     private static final String YOUTUBE_KEY = "YoutubeId";
 
-    public void updateCalender(MultipartFile calender) {
-        String calenderImageUrl = s3Service.uploadImage(calender, CALENDER_PATH);
+    public void updateCalendar(MultipartFile calendar) {
+        String calendarImageUrl = s3Service.uploadImage(calendar, CALENDAR_PATH);
 
-        redisService.saveImageUrl(CALENDER_KEY, calenderImageUrl);
+        redisService.saveImageUrl(CALENDAR_KEY, calendarImageUrl);
     }
 
-    public String getCalender() {
-        return redisService.getImageUrl(CALENDER_KEY);
+    public String getCalendar() {
+        return redisService.getImageUrl(CALENDAR_KEY);
     }
 
     public void updateYoutube(String youtubeUrl) {

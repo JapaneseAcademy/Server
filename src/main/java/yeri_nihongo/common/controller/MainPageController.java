@@ -33,18 +33,18 @@ public class MainPageController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/calender")
-    public ResponseEntity<CalenderResponseDto> getCalender() {
-        String calender = mainPageService.getCalender();
+    @GetMapping("/calendar")
+    public ResponseEntity<CalendarResponseDto> getCalendar() {
+        String calender = mainPageService.getCalendar();
 
-        return ResponseEntity.ok(new CalenderResponseDto(calender));
+        return ResponseEntity.ok(new CalendarResponseDto(calender));
     }
 
-    @PutMapping("/calender")
-    public ResponseEntity<HttpStatus> saveCalender(
-            @RequestPart MultipartFile calender
+    @PutMapping("/calendar")
+    public ResponseEntity<HttpStatus> saveCalendar(
+            @RequestPart MultipartFile calendar
     ) {
-        mainPageService.updateCalender(calender);
+        mainPageService.updateCalendar(calendar);
 
         return ResponseEntity.ok().build();
     }
@@ -57,7 +57,7 @@ public class MainPageController {
 
     @Getter
     @AllArgsConstructor
-    public static class CalenderResponseDto {
-        private String calender;
+    public static class CalendarResponseDto {
+        private String calendar;
     }
 }
