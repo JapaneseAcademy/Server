@@ -44,6 +44,7 @@ public class MemberConverter {
                     .name(member.getName())
                     .phone(member.getPhone())
                     .paymentDate(enrollment.getPaymentAt().toLocalDate())
+                    .enrollmentId(enrollment.getId())
                     .category(enrollment.getCategory())
                     .build();
         } catch (Exception e) {
