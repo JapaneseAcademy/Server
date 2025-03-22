@@ -35,9 +35,9 @@ public class MainPageController {
 
     @GetMapping("/calendar")
     public ResponseEntity<CalendarResponseDto> getCalendar() {
-        String calender = mainPageService.getCalendar();
+        String calendar = mainPageService.getCalendar();
 
-        return ResponseEntity.ok(new CalendarResponseDto(calender));
+        return ResponseEntity.ok(new CalendarResponseDto(calendar));
     }
 
     @PutMapping("/calendar")
