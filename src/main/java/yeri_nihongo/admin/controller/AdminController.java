@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import yeri_nihongo.admin.dto.request.MessageRequest;
 import yeri_nihongo.admin.dto.response.MessageResponse;
 import yeri_nihongo.admin.service.MessageService;
+import yeri_nihongo.course.dto.request.CostUpdateRequest;
 import yeri_nihongo.course.dto.request.CourseCreateRequest;
-import yeri_nihongo.course.dto.request.CourseUpdateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
 import yeri_nihongo.course.service.CourseInfoService;
@@ -188,12 +188,12 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/courses/{courseId}")
+    @PutMapping("/time-tables/{timeTableId}")
     public ResponseEntity<HttpStatus> updateSaleCost(
-            @PathVariable Long courseId,
-            @RequestBody @Valid CourseUpdateRequest request
+            @PathVariable Long timeTableId,
+            @RequestBody @Valid CostUpdateRequest request
     ) {
-        courseService.updateSaleCost(courseId, request);
+        timeTableService.updateSaleCostByTimeTableId(timeTableId, request);
 
         return ResponseEntity.ok().build();
     }

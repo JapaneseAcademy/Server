@@ -1,6 +1,7 @@
 package yeri_nihongo.time.service;
 
 import yeri_nihongo.course.domain.Course;
+import yeri_nihongo.course.dto.request.CostUpdateRequest;
 import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.time.dto.request.TimeBlockCreateRequest;
 import yeri_nihongo.time.dto.response.TimeTableResponse;
@@ -21,4 +22,6 @@ public interface TimeTableService {
     void createTimeTable(Course course, List<TimeBlockCreateRequest> requests);
 
     void deleteTimeTable(Long timeTableId);
+
+    void updateSaleCostByTimeTableId(Long timeTableId, CostUpdateRequest request);
 }

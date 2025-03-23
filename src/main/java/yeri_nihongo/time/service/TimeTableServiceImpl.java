@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yeri_nihongo.common.service.CommonService;
 import yeri_nihongo.course.domain.Course;
+import yeri_nihongo.course.dto.request.CostUpdateRequest;
 import yeri_nihongo.enrollment.domain.Enrollment;
 import yeri_nihongo.enrollment.repository.EnrollmentRepository;
 import yeri_nihongo.exception.time.TimeTableDeletionException;
@@ -92,5 +93,12 @@ public class TimeTableServiceImpl implements TimeTableService {
         } else {
             throw new TimeTableDeletionException(timeTableId);
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateSaleCostByTimeTableId(Long timeTableId, CostUpdateRequest request) {
+        Course course = timeTableRepository.findCourseByTimeTableId(timeTableId);
+        course.updateCost(request.getCost());
     }
 }
