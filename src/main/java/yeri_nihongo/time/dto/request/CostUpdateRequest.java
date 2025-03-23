@@ -1,4 +1,4 @@
-package yeri_nihongo.course.dto.request;
+package yeri_nihongo.time.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

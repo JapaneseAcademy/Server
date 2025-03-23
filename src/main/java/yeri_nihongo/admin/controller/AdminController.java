@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import yeri_nihongo.admin.dto.request.MessageRequest;
 import yeri_nihongo.admin.dto.response.MessageResponse;
 import yeri_nihongo.admin.service.MessageService;
-import yeri_nihongo.course.dto.request.CostUpdateRequest;
 import yeri_nihongo.course.dto.request.CourseCreateRequest;
 import yeri_nihongo.course.dto.response.CourseForAdminResponse;
 import yeri_nihongo.course.dto.response.CourseListForAdminResponse;
@@ -25,6 +24,7 @@ import yeri_nihongo.member.dto.response.MemberForAdminResponse;
 import yeri_nihongo.member.service.MemberService;
 import yeri_nihongo.review.dto.response.ReviewListForAdminResponse;
 import yeri_nihongo.review.service.ReviewService;
+import yeri_nihongo.time.dto.request.CostUpdateRequest;
 import yeri_nihongo.time.dto.response.TimeTableStudentsResponse;
 import yeri_nihongo.time.service.TimeTableService;
 
