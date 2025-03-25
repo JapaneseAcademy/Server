@@ -194,7 +194,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     private void validateOwner(Enrollment enrollment) {
         Long memberId = PrincipalDetailsService.getCurrentMemberId();
-        if (memberId != enrollment.getMember().getId()) {
+        if (!memberId.equals(enrollment.getMember().getId())) {
             throw new UserForbiddenException(memberId);
         }
     }
