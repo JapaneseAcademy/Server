@@ -41,10 +41,10 @@ public class Enrollment extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDateTime paymentAt;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String paymentKey;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String orderId;
 
     @Column(nullable = false)
