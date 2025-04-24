@@ -124,18 +124,19 @@ public class CourseConverter {
             CourseInfo courseInfo, List<String> descriptions, Course course
     ) {
         try {
+            int cost = course == null ? 0 : course.getCost();
+
             return CourseListForAdminResponse.adminBuilder()
                     .courseInfoId(courseInfo.getId())
                     .title(courseInfo.getTitle())
                     .baseCost(courseInfo.getCost())
-                    .saleCost(course.getCost())
+                    .saleCost(cost)
                     .isLive(courseInfo.getIsLive())
                     .isOnline(courseInfo.getIsOnline())
                     .isRecorded(courseInfo.getIsRecorded())
                     .mainImageUrl(courseInfo.getMainImageUrl())
                     .descriptions(descriptions)
                     .level(courseInfo.getLevel())
-                    .date(getDate(course))
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();

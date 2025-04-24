@@ -88,8 +88,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getCurrentCourseEntityByCourseInfoId(Long courseInfoId) {
-        return courseRepository.findCurrentCourseByCourseInfoId(courseInfoId)
-                .orElseThrow(() -> new NoScheduledCourseException(courseInfoId));
+        return courseRepository.findCurrentCourseByCourseInfoId(courseInfoId).orElse(null);
+//                .orElseThrow(() -> new NoScheduledCourseException(courseInfoId));
     }
 
     @Override

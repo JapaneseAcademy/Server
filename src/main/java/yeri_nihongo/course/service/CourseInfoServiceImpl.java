@@ -63,7 +63,6 @@ public class CourseInfoServiceImpl implements CourseInfoService {
         List<CourseInfo> courseInfos = courseInfoRepository.findAll();
 
         return courseInfos.stream()
-                .filter(courseInfo -> courseService.getExistsCurrentCourseByCourseInfoId(courseInfo.getId()))
                 .map(courseInfo -> {
                     List<String> descriptions = descriptionRepository.getDescriptionImageUrlsByCourseInfoId(courseInfo.getId());
                     Course course = courseService.getCurrentCourseEntityByCourseInfoId(courseInfo.getId());
