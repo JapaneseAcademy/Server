@@ -21,10 +21,11 @@ public class CourseListForAdminResponse extends CourseListResponse{
             boolean isLive,
             boolean isOnline,
             boolean isRecorded,
+            boolean isLiveOnline,
             Level level,
             List<String> descriptions
     ) {
-        super(courseInfoId, title, baseCost, saleCost, mainImageUrl, isLive, isOnline, isRecorded, level, "");
+        super(courseInfoId, title, baseCost, saleCost, mainImageUrl, isLive, isOnline, isRecorded, isLiveOnline, level, "");
         this.descriptions = descriptions;
     }
 }

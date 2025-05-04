@@ -17,6 +17,7 @@ public class CourseInfoResponse {
     private boolean isLive;
     private boolean isOnline;
     private boolean isRecorded;
+    private boolean isLiveOnline;
     private Level level;
     private CourseResponse course;
 }

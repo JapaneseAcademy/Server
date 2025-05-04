@@ -16,6 +16,7 @@ public class CourseListResponse {
     private boolean isLive;
     private boolean isOnline;
     private boolean isRecorded;
+    private boolean isLiveOnline;
     private Level level;
     private String date;
 }

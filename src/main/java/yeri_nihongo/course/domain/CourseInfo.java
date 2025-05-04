@@ -33,6 +33,9 @@ public class CourseInfo {
     @Column(nullable = false)
     private Boolean isRecorded;
 
+    @Column(nullable = false)
+    private Boolean isLiveOnline;
+
     @Enumerated(EnumType.STRING)
     private Level level;
 }
