@@ -109,7 +109,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
         if (category.equals(Category.LIVE) && !courseInfo.getIsLive()
                 || category.equals(Category.ONLINE) && !courseInfo.getIsOnline()
-                || category.equals(Category.RECORDED) && !courseInfo.getIsRecorded()) {
+                || category.equals(Category.RECORDED) && !courseInfo.getIsRecorded()
+                || category.equals(Category.LIVEONLINE) && !courseInfo.getIsLiveOnline()) {
             throw new UnavailableCategoryException(courseInfo.getId());
         }
     }
