@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MainPageService {
@@ -19,11 +22,12 @@ public class MainPageService {
     public void updateCalendar(MultipartFile calendar) {
         String calendarImageUrl = s3Service.uploadImage(calendar, CALENDAR_PATH);
 
-        redisService.saveImageUrl(CALENDAR_KEY, calendarImageUrl);
+        redisService.saveImageUrl(CALENDAR_KEY, calendarImageUrl + ",https://yeri-nihongo-bucket.s3.ap-northeast-2.amazonaws.com/6%EC%9B%94%EA%B0%9C%ED%8E%B8%EC%8D%B8%EB%84%A4%EC%9D%BC/%EC%88%98%EA%B0%95%EB%A3%8C-007.png");
     }
 
-    public String getCalendar() {
-        return redisService.getImageUrl(CALENDAR_KEY);
+    public List<String> getCalendar() {
+        String calendarImageUrl = redisService.getImageUrl(CALENDAR_KEY);
+        return Arrays.asList(calendarImageUrl.split(","));
     }
 
     public void updateYoutube(String youtubeUrl) {
