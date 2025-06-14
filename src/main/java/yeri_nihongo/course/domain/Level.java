@@ -10,5 +10,6 @@ public enum Level {
     기초탈출회화,
     초보탈출회화,
     단기간컷,
-    JLPT
+    JLPT,
+    라이트
 }
