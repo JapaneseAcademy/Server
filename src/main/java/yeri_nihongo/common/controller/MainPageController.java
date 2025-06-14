@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yeri_nihongo.common.service.MainPageService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/main")
 @RequiredArgsConstructor
@@ -35,7 +37,7 @@ public class MainPageController {
 
     @GetMapping("/calendar")
     public ResponseEntity<CalendarResponseDto> getCalendar() {
-        String calendar = mainPageService.getCalendar();
+        List<String> calendar = mainPageService.getCalendar();
 
         return ResponseEntity.ok(new CalendarResponseDto(calendar));
     }
@@ -58,6 +60,6 @@ public class MainPageController {
     @Getter
     @AllArgsConstructor
     public static class CalendarResponseDto {
-        private String calendar;
+        private List<String> calendar;
     }
 }
