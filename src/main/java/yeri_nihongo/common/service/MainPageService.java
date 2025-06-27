@@ -3,6 +3,10 @@ package yeri_nihongo.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import yeri_nihongo.common.dto.response.CalendarResponse;
+import yeri_nihongo.course.repository.InstructorRepository;
+import yeri_nihongo.exception.member.UserNotFoundException;
+import yeri_nihongo.member.domain.Instructor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,21 +17,36 @@ public class MainPageService {
 
     private final S3Service s3Service;
     private final RedisService redisService;
+    private final InstructorRepository instructorRepository;
 
     private static final String CALENDAR_PATH = "calendar/";
 
     private static final String CALENDAR_KEY = "CalendarId";
     private static final String YOUTUBE_KEY = "YoutubeId";
 
-    public void updateCalendar(MultipartFile calendar) {
+    public void updateCalendar(Long instructorId, MultipartFile calendar) {
         String calendarImageUrl = s3Service.uploadImage(calendar, CALENDAR_PATH);
 
-        redisService.saveImageUrl(CALENDAR_KEY, calendarImageUrl + ",https://yeri-nihongo-bucket.s3.ap-northeast-2.amazonaws.com/6%EC%9B%94%EA%B0%9C%ED%8E%B8%EC%8D%B8%EB%84%A4%EC%9D%BC/1000026711.png");
+        Instructor instructor = instructorRepository.findById(instructorId)
+                .orElseThrow(() -> new UserNotFoundException(instructorId));
+
+        instructor.updateCalendarUrl(calendarImageUrl);
+        instructorRepository.save(instructor);
     }
 
     public List<String> getCalendar() {
         String calendarImageUrl = redisService.getImageUrl(CALENDAR_KEY);
         return Arrays.asList(calendarImageUrl.split(","));
+    }
+
+    public List<CalendarResponse> getCalendars() {
+        List<Instructor> instructors = instructorRepository.findAll();
+        return instructors.stream()
+                .map(instructor -> CalendarResponse.builder()
+                        .instructorId(instructor.getId())
+                        .calendarUrl(instructor.getCalendarUrl())
+                        .build())
+                .toList();
     }
 
     public void updateYoutube(String youtubeUrl) {

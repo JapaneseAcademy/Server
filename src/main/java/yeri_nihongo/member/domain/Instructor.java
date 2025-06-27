@@ -22,4 +22,8 @@ public class Instructor {
 
     @Column(length = 2048)
     private String calendarUrl;
+
+    public void updateCalendarUrl(String calendarUrl) {
+        this.calendarUrl = calendarUrl;
+    }
 }
