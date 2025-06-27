@@ -48,6 +48,7 @@ public class CourseConverter {
                     .descriptions(descriptions)
                     .level(courseInfo.getLevel())
                     .course(course)
+                    .calendarUrl(courseInfo.getInstructor().getCalendarUrl())
                     .build();
         } catch (Exception e) {
             throw new CourseMappingException();

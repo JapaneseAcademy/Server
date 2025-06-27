@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import yeri_nihongo.common.dto.response.CalendarResponse;
 import yeri_nihongo.common.service.MainPageService;
 
 import java.util.List;
@@ -42,14 +43,14 @@ public class MainPageController {
         return ResponseEntity.ok(new CalendarResponseDto(calendar));
     }
 
-    @PutMapping("/calendar")
-    public ResponseEntity<HttpStatus> saveCalendar(
-            @RequestPart MultipartFile calendar
-    ) {
-        mainPageService.updateCalendar(calendar);
-
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/calendar")
+//    public ResponseEntity<HttpStatus> saveCalendar(
+//            @RequestPart MultipartFile calendar
+//    ) {
+//        mainPageService.updateCalendar(calendar);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     @Getter
     @AllArgsConstructor
@@ -61,5 +62,21 @@ public class MainPageController {
     @AllArgsConstructor
     public static class CalendarResponseDto {
         private List<String> calendar;
+    }
+
+    @GetMapping("/calendars")
+    public ResponseEntity<List<CalendarResponse>> getCalendars() {
+        List<CalendarResponse> calendars = mainPageService.getCalendars();
+
+        return ResponseEntity.ok(calendars);
+    }
+
+    @PutMapping("/instructor/{instructorId}/calendar")
+    public ResponseEntity<Void> updateCalendarByInstructor(
+            @PathVariable Long instructorId,
+            @RequestPart MultipartFile calendar
+    ) {
+        mainPageService.updateCalendar(instructorId, calendar);
+        return ResponseEntity.ok().build();
     }
 }
