@@ -2,6 +2,7 @@ package yeri_nihongo.course.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import yeri_nihongo.member.domain.Instructor;
 
 @Entity
 @Getter
@@ -38,4 +39,8 @@ public class CourseInfo {
 
     @Enumerated(EnumType.STRING)
     private Level level;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "instructorId", nullable = true)
+    private Instructor instructor;
 }

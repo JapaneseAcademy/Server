@@ -20,4 +20,5 @@ public class CourseInfoResponse {
     private boolean isLiveOnline;
     private Level level;
     private CourseResponse course;
+    private String calendarUrl;
 }

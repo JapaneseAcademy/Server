@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import yeri_nihongo.course.domain.CourseInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseInfoRepository extends JpaRepository<CourseInfo, Long> {
@@ -20,4 +21,11 @@ public interface CourseInfoRepository extends JpaRepository<CourseInfo, Long> {
             "FROM CourseInfo ci " +
             "WHERE ci.id = :courseInfoId")
     int findCostByCourseInfoId(@Param("courseInfoId") Long courseInfoId);
+
+    @Override
+    @Query("SELECT ci " +
+            "FROM CourseInfo ci " +
+            "LEFT JOIN FETCH ci.instructor i " +
+            "WHERE ci.id = :courseInfoId")
+    Optional<CourseInfo> findById(@Param("courseInfoId") Long courseInfoId);
 }
