@@ -34,7 +34,7 @@ public class TossServiceImpl implements TossService {
 
     public static final String BASE_ORDER_ID = "YERI-JP-ORDER-TOSS-";
 
-    private static final int MAX_LIVE_ENROLLMENT = 12;
+    private static final int MAX_LIVE_ENROLLMENT = 9;
 
     private final TimeTableService timeTableService;
     private final RedisService redisService;
